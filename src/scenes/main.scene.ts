@@ -11,6 +11,7 @@ export default class Main extends Phaser.Scene {
     Player.preload(this)
     this.load.image('tiles', 'assets/rpg_nature_tileset.png')
     this.load.tilemapTiledJSON('map', 'assets/map.json')
+    this.load.atlas('resources', 'assets/resources.png', 'assets/resources_atlas.json')
   }
 
   create() {
@@ -20,6 +21,14 @@ export default class Main extends Phaser.Scene {
     map.createLayer('Capa de patrones 2', tileset, 0, 0)
     layer1.setCollisionByProperty({ collides: true })
     this.matter.world.convertTilemapLayer(layer1)
+
+    const tree = new Phaser.Physics.Matter.Sprite(this.matter.world, 50, 50, 'resources', 'tree')
+    tree.setStatic(true)
+    const rock = new Phaser.Physics.Matter.Sprite(this.matter.world, 150, 150, 'resources', 'rock')
+    rock.setStatic(true)
+    this.add.existing(tree)
+    this.add.existing(rock)
+
     this.player = new Player(this, 100, 100)
     this.add.existing(this.player)
   }
