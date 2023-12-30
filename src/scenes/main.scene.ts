@@ -2,6 +2,7 @@ import { Player } from '@/sprites'
 
 export default class Main extends Phaser.Scene {
   #player!: Player
+  #map!: Phaser.Tilemaps.Tilemap
 
   constructor() {
     super('main-scene')
@@ -15,30 +16,31 @@ export default class Main extends Phaser.Scene {
   }
 
   create() {
-    const { world } = this.matter
-    const { Sprite } = Phaser.Physics.Matter
-    const map = this.make.tilemap({ key: 'map' })
-    const tileset = map.addTilesetImage('rpg_nature_tileset', 'tiles', 32, 32, 0, 0)!
-
-    const layer1 = map.createLayer('Capa de patrones 1', tileset, 0, 0)!
+    this.#map = this.make.tilemap({ key: 'map' })
+    const tileset = this.#map.addTilesetImage('rpg_nature_tileset', 'tiles', 32, 32, 0, 0)!
+    const layer1 = this.#map.createLayer('Layer 1', tileset, 0, 0)!
     layer1.setCollisionByProperty({ collides: true })
-    world.convertTilemapLayer(layer1)
-
-    map.createLayer('Capa de patrones 2', tileset, 0, 0)
-
-    const tree = new Sprite(world, 50, 50, 'resources', 'tree')
-    tree.setStatic(true)
-    this.add.existing(tree)
-
-    const rock = new Sprite(world, 150, 150, 'resources', 'rock')
-    rock.setStatic(true)
-    this.add.existing(rock)
-
+    this.matter.world.convertTilemapLayer(layer1)
+    this.#map.createLayer('Layer 2', tileset, 0, 0)
     this.#player = new Player(this, 100, 100)
     this.add.existing(this.#player)
+    this.#addResources()
   }
 
   update() {
     this.#player.update()
+  }
+
+  #addResources() {
+    const resources = this.#map.getObjectLayer('Resources')
+    resources?.objects.forEach(({ x, y, type }) => {
+      const item = new Phaser.Physics.Matter.Sprite(this.matter.world, x!, y!, 'resources', type)
+      const physics = new Phaser.Physics.Matter.MatterPhysics(this)
+      const collider = physics.bodies.circle(x!, y!, 12, { isSensor: false, label: 'resourceCollider' })
+      item.setExistingBody(collider)
+      item.setStatic(true)
+      item.setOrigin(0.5, type === 'tree' ? 0.8 : 0.6)
+      this.add.existing(item)
+    })
   }
 }
