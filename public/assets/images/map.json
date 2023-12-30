@@ -41,7 +41,7 @@
         {
           "gid": 21,
           "height": 32,
-          "id": 1,
+          "id": 8,
           "name": "",
           "rotation": 0,
           "type": "tree",
@@ -53,7 +53,7 @@
         {
           "gid": 22,
           "height": 32,
-          "id": 2,
+          "id": 9,
           "name": "",
           "rotation": 0,
           "type": "bush",
@@ -65,7 +65,7 @@
         {
           "gid": 23,
           "height": 32,
-          "id": 3,
+          "id": 10,
           "name": "",
           "rotation": 0,
           "type": "rock",
@@ -83,7 +83,7 @@
     }
   ],
   "nextlayerid": 5,
-  "nextobjectid": 4,
+  "nextobjectid": 11,
   "orientation": "orthogonal",
   "renderorder": "right-down",
   "tiledversion": "1.10.2",

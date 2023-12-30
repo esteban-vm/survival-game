@@ -9,6 +9,8 @@ const config: Phaser.Types.Core.GameConfig = {
   type: Phaser.AUTO,
   backgroundColor: '#999',
   scene: [Main],
+  autoFocus: true,
+  pixelArt: true,
   scale: {
     zoom: 2,
     mode: Phaser.Scale.FIT,

@@ -17,11 +17,11 @@ export default class Main extends Phaser.Scene {
 
   create() {
     this.#map = this.make.tilemap({ key: 'map' })
-    const tileset = this.#map.addTilesetImage('rpg_nature_tileset', 'tiles', 32, 32, 0, 0)!
-    const layer1 = this.#map.createLayer('Layer 1', tileset, 0, 0)!
+    const tileset = this.#map.addTilesetImage('rpg_nature_tileset', 'tiles')!
+    const layer1 = this.#map.createLayer('Layer 1', tileset)!
     layer1.setCollisionByProperty({ collides: true })
     this.matter.world.convertTilemapLayer(layer1)
-    this.#map.createLayer('Layer 2', tileset, 0, 0)
+    this.#map.createLayer('Layer 2', tileset)
     this.#player = new Player(this, 100, 100)
     this.add.existing(this.#player)
     this.#addResources()
@@ -34,12 +34,16 @@ export default class Main extends Phaser.Scene {
   #addResources() {
     const resources = this.#map.getObjectLayer('Resources')
     resources?.objects.forEach(({ x, y, type }) => {
-      const item = new Phaser.Physics.Matter.Sprite(this.matter.world, x!, y!, 'resources', type)
-      const physics = new Phaser.Physics.Matter.MatterPhysics(this)
-      const collider = physics.bodies.circle(x!, y!, 12, { isSensor: false, label: 'resourceCollider' })
+      const { Sprite, MatterPhysics } = Phaser.Physics.Matter
+      const item = new Sprite(this.matter.world, x!, y!, 'resources', type)
+      const yOrigin = type === 'tree' ? 0.8 : 0.6
+      item.x += item.width / 2
+      item.y -= item.height / 2
+      item.y += item.height * (yOrigin - 0.5)
+      const collider = new MatterPhysics(this).bodies.circle(item.x, item.y, 12)
       item.setExistingBody(collider)
       item.setStatic(true)
-      item.setOrigin(0.5, type === 'tree' ? 0.8 : 0.6)
+      item.setOrigin(0.5, yOrigin)
       this.add.existing(item)
     })
   }
