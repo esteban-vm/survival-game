@@ -13,12 +13,11 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
     this.setFixedRotation()
     this.#keys = this.scene.input.keyboard!.createCursorKeys()
     this.#pointer = this.scene.input.pointer1
-    // console.log(this.scene.game.device.os.desktop)
   }
 
   static preload(scene: Phaser.Scene) {
-    scene.load.atlas('player', 'assets/player.png', 'assets/player_atlas.json')
-    scene.load.animation('player_anim', 'assets/player_anim.json')
+    scene.load.atlas('player', 'assets/images/player.png', 'assets/images/player_atlas.json')
+    scene.load.animation('player_anim', 'assets/images/player_anim.json')
   }
 
   update() {
