@@ -1,4 +1,4 @@
-import { Player, Resource } from '@/sprites'
+import { Pickaxe, Player, Resource } from '@/sprites'
 
 export default class Main extends Phaser.Scene {
   #player!: Player
@@ -12,6 +12,7 @@ export default class Main extends Phaser.Scene {
   preload() {
     Player.preload(this)
     Resource.preload(this)
+    Pickaxe.preload(this)
     this.load.image('tiles', 'assets/images/rpg_nature_tileset.png')
     this.load.tilemapTiledJSON('map', 'assets/images/map.json')
   }

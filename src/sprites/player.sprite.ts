@@ -1,6 +1,11 @@
+import Pickaxe from '@/pickaxe'
+
 export default class Player extends Phaser.Physics.Matter.Sprite {
   #keys
-  #pointer
+  #mousePointer
+  // #touchPointer
+  #pickaxe
+  #pickaxeRotation
 
   constructor(scene: Phaser.Scene, x: number, y: number) {
     super(scene.matter.world, x, y, 'player', 'player_idle_1')
@@ -12,7 +17,10 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
     this.setExistingBody(compoundBody)
     this.setFixedRotation()
     this.#keys = this.scene.input.keyboard!.createCursorKeys()
-    this.#pointer = this.scene.input.pointer1
+    this.#mousePointer = this.scene.input.mousePointer
+    // this.#touchPointer = this.scene.input.pointer1
+    this.#pickaxe = new Pickaxe(this.scene, this.x, this.y)
+    this.#pickaxeRotation = 0
   }
 
   static preload(scene: Phaser.Scene) {
@@ -23,18 +31,26 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
   update() {
     const velocity = new Phaser.Math.Vector2()
     const { left, right, up, down } = this.#keys
-    const { position, wasTouch } = this.#pointer
+    // const { position, wasTouch } = this.#touchPointer
 
-    const touchingLeft = left.isDown || (wasTouch && position.x < this.x)
-    const touchingRight = right.isDown || (wasTouch && position.x > this.x)
-    const touchingUp = up.isDown || (wasTouch && position.y < this.y)
-    const touchingDown = down.isDown || (wasTouch && position.y > this.y)
+    const touchingLeft = left.isDown /* || (wasTouch && position.x < this.x) */
+    const touchingRight = right.isDown /* || (wasTouch && position.x > this.x) */
+    const touchingUp = up.isDown /* || (wasTouch && position.y < this.y) */
+    const touchingDown = down.isDown /* || (wasTouch && position.y > this.y) */
 
-    if (touchingLeft) velocity.x = -1
-    else if (touchingRight) velocity.x = 1
+    if (touchingLeft) {
+      velocity.x = -1
+      this.setFlipX(true)
+    } else if (touchingRight) {
+      velocity.x = 1
+      this.setFlipX(false)
+    }
 
-    if (touchingUp) velocity.y = -1
-    else if (touchingDown) velocity.y = 1
+    if (touchingUp) {
+      velocity.y = -1
+    } else if (touchingDown) {
+      velocity.y = 1
+    }
 
     velocity.normalize()
     velocity.scale(2.5)
@@ -45,9 +61,30 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
     } else {
       this.anims.play('player_idle', true)
     }
+
+    this.#pickaxe.setPosition(this.x, this.y)
+    this.#rotatePickaxe()
   }
 
   get #velocity() {
     return this.body!.velocity
+  }
+
+  #rotatePickaxe() {
+    if (this.#mousePointer.isDown) {
+      this.#pickaxeRotation += 6
+    } else {
+      this.#pickaxeRotation = 0
+    }
+
+    if (this.#pickaxeRotation > 100) {
+      this.#pickaxeRotation = 0
+    }
+
+    if (this.flipX) {
+      this.#pickaxe.setAngle(-this.#pickaxeRotation - 90)
+    } else {
+      this.#pickaxe.setAngle(this.#pickaxeRotation)
+    }
   }
 }
