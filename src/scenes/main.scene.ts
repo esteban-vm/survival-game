@@ -31,7 +31,7 @@ export default class Main extends Phaser.Scene {
     this.matter.world.convertTilemapLayer(layer1)
     this.#map.createLayer('Layer 2', tileset)
     if (this.#runningOnDesktop) {
-      this.#player = new Player(this, 100, 100)
+      this.#player = new Player(this, 200, 200)
       this.#addResources()
     }
   }

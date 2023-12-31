@@ -1,4 +1,5 @@
 import Pickaxe from '@/pickaxe'
+import Resource from '@/resource'
 
 export default class Player extends Phaser.Physics.Matter.Sprite {
   #keys
@@ -6,10 +7,12 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
   // #touchPointer
   #pickaxe
   #pickaxeRotation
+  #touchingResources
 
   constructor(scene: Phaser.Scene, x: number, y: number) {
     super(scene.matter.world, x, y, 'player', 'player_idle_1')
     this.scene.add.existing(this)
+    this.name = 'player'
     const physics = new Phaser.Physics.Matter.MatterPhysics(this.scene)
     const collider = physics.bodies.circle(this.x, this.y, 12)
     const sensor = physics.bodies.circle(this.x, this.y, 24, { isSensor: true })
@@ -21,6 +24,8 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
     // this.#touchPointer = this.scene.input.pointer1
     this.#pickaxe = new Pickaxe(this.scene, this.x, this.y)
     this.#pickaxeRotation = 0
+    this.#touchingResources = <Resource[]>[]
+    this.#createMiningCollisions(sensor)
   }
 
   static preload(scene: Phaser.Scene) {
@@ -86,5 +91,24 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
     } else {
       this.#pickaxe.setAngle(this.#pickaxeRotation)
     }
+  }
+
+  #createMiningCollisions(playerSensor: MatterJS.BodyType) {
+    this.scene.matterCollision.addOnCollideStart({
+      objectA: playerSensor,
+      callback: ({ bodyB, gameObjectB }) => {
+        if ((<MatterJS.BodyType>bodyB).isSensor) return
+        if (gameObjectB instanceof Resource) {
+          this.#touchingResources.push(gameObjectB)
+        }
+      },
+    })
+
+    this.scene.matterCollision.addOnCollideEnd({
+      objectA: playerSensor,
+      callback: ({ gameObjectB }) => {
+        this.#touchingResources = this.#touchingResources.filter((object) => object !== gameObjectB)
+      },
+    })
   }
 }
