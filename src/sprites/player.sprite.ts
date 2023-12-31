@@ -84,6 +84,7 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
 
     if (this.#pickaxeRotation > 100) {
       this.#pickaxeRotation = 0
+      this.#whackStuff()
     }
 
     if (this.flipX) {
@@ -110,5 +111,10 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
         this.#touchingResources = this.#touchingResources.filter((object) => object !== gameObjectB)
       },
     })
+  }
+
+  #whackStuff() {
+    this.#touchingResources = this.#touchingResources.filter((resource) => !resource.dead)
+    this.#touchingResources.forEach((resource) => resource.hit())
   }
 }
