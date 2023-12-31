@@ -4,21 +4,23 @@ export default class Main extends Phaser.Scene {
   #player!: Player
   #resources!: Resource[]
   #map!: Phaser.Tilemaps.Tilemap
+  #runningOnDesktop!: boolean
 
   constructor() {
     super('main-scene')
   }
 
   preload() {
+    Pickaxe.preload(this)
     Player.preload(this)
     Resource.preload(this)
-    Pickaxe.preload(this)
     this.load.image('tiles', 'assets/images/rpg_nature_tileset.png')
     this.load.tilemapTiledJSON('map', 'assets/images/map.json')
   }
 
   init() {
     this.#resources = []
+    this.#runningOnDesktop = this.game.device.os.desktop
   }
 
   create() {
@@ -28,12 +30,16 @@ export default class Main extends Phaser.Scene {
     layer1.setCollisionByProperty({ collides: true })
     this.matter.world.convertTilemapLayer(layer1)
     this.#map.createLayer('Layer 2', tileset)
-    this.#player = new Player(this, 100, 100)
-    this.#addResources()
+    if (this.#runningOnDesktop) {
+      this.#player = new Player(this, 100, 100)
+      this.#addResources()
+    }
   }
 
   update() {
-    this.#player.update()
+    if (this.#runningOnDesktop) {
+      this.#player.update()
+    }
   }
 
   #addResources() {
