@@ -1,6 +1,6 @@
 import { Player, Resource } from '@/sprites'
 
-export default class Main extends Phaser.Scene {
+const Main = class extends Phaser.Scene {
   #player!: Player
   #resources!: Resource[]
   #map!: Phaser.Tilemaps.Tilemap
@@ -50,3 +50,5 @@ interface CustomProperties {
   type: string
   value: string | number
 }
+
+export default Main

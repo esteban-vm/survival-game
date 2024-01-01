@@ -1,4 +1,4 @@
-export default class Preloader extends Phaser.Scene {
+const Preloader = class extends Phaser.Scene {
   constructor() {
     super('preloader-scene')
   }
@@ -20,3 +20,5 @@ export default class Preloader extends Phaser.Scene {
     this.scene.start('main-scene')
   }
 }
+
+export default Preloader
