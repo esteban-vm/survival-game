@@ -118,12 +118,12 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
       },
     })
 
-    this.scene.matterCollision.addOnCollideActive({
-      objectA: playerCollider,
-      callback: ({ gameObjectB }) => {
-        if (gameObjectB instanceof Drop) gameObjectB.pickup()
-      },
-    })
+    // this.scene.matterCollision.addOnCollideActive({
+    //   objectA: playerCollider,
+    //   callback: ({ gameObjectB }) => {
+    //     if (gameObjectB instanceof Drop) gameObjectB.pickup()
+    //   },
+    // })
   }
 
   #whackStuff() {
