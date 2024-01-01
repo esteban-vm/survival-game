@@ -33,10 +33,8 @@ export default class Resource extends Phaser.Physics.Matter.Sprite {
     this.#sound.play()
     this.#health--
     if (this.dead) {
+      this.#dropFrames.forEach((frame) => this.#dropItems.push(new Drop(this.scene, this.x, this.y, frame)))
       this.destroy()
-      this.#dropFrames.forEach((frame) => {
-        this.#dropItems.push(new Drop(this.scene, this.x, this.y, frame))
-      })
     }
   }
 }
