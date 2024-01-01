@@ -1,3 +1,4 @@
-export { default as Pickaxe } from './pickaxe.sprite'
-export { default as Player } from './player.sprite'
-export { default as Resource } from './resource.sprite'
+export { default as Drop } from '@/drop'
+export { default as Pickaxe } from '@/pickaxe'
+export { default as Player } from '@/player'
+export { default as Resource } from '@/resource'

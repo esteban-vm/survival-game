@@ -1,3 +1,4 @@
+import Drop from '@/drop'
 import Pickaxe from '@/pickaxe'
 import Resource from '@/resource'
 
@@ -26,11 +27,7 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
     this.#pickaxeRotation = 0
     this.#touchingResources = <Resource[]>[]
     this.#createMiningCollisions(sensor)
-  }
-
-  static preload(scene: Phaser.Scene) {
-    scene.load.atlas('player', 'assets/images/player.png', 'assets/images/player_atlas.json')
-    scene.load.animation('player_anim', 'assets/images/player_anim.json')
+    this.#createPickupCollisions(collider)
   }
 
   update() {
@@ -109,6 +106,22 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
       objectA: playerSensor,
       callback: ({ gameObjectB }) => {
         this.#touchingResources = this.#touchingResources.filter((object) => object !== gameObjectB)
+      },
+    })
+  }
+
+  #createPickupCollisions(playerCollider: MatterJS.BodyType) {
+    this.scene.matterCollision.addOnCollideStart({
+      objectA: playerCollider,
+      callback: ({ gameObjectB }) => {
+        if (gameObjectB instanceof Drop) gameObjectB.pickup()
+      },
+    })
+
+    this.scene.matterCollision.addOnCollideActive({
+      objectA: playerCollider,
+      callback: ({ gameObjectB }) => {
+        if (gameObjectB instanceof Drop) gameObjectB.pickup()
       },
     })
   }

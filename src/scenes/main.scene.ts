@@ -1,4 +1,4 @@
-import { Pickaxe, Player, Resource } from '@/sprites'
+import { Player, Resource } from '@/sprites'
 
 export default class Main extends Phaser.Scene {
   #player!: Player
@@ -8,14 +8,6 @@ export default class Main extends Phaser.Scene {
 
   constructor() {
     super('main-scene')
-  }
-
-  preload() {
-    Pickaxe.preload(this)
-    Player.preload(this)
-    Resource.preload(this)
-    this.load.image('tiles', 'assets/images/rpg_nature_tileset.png')
-    this.load.tilemapTiledJSON('map', 'assets/images/map.json')
   }
 
   init() {
@@ -44,8 +36,17 @@ export default class Main extends Phaser.Scene {
 
   #addResources() {
     const resources = this.#map.getObjectLayer('Resources')
-    resources?.objects.forEach(({ x, y, type }) => {
-      this.#resources.push(new Resource(this, x!, y!, type))
+    resources?.objects.forEach(({ x, y, type, properties }) => {
+      const customProperties = <CustomProperties[]>properties
+      const offset = <number>customProperties.find(({ name }) => name === 'offset')!.value
+      const drops = <[number, number]>JSON.parse(<string>customProperties.find(({ name }) => name === 'drops')!.value)
+      this.#resources.push(new Resource(this, x!, y!, type, offset, drops))
     })
   }
+}
+
+interface CustomProperties {
+  name: string
+  type: string
+  value: string | number
 }

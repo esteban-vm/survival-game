@@ -6,8 +6,4 @@ export default class Pickaxe extends Phaser.GameObjects.Sprite {
     this.setOrigin(0.25, 0.75)
     this.setScale(0.8)
   }
-
-  static preload(scene: Phaser.Scene) {
-    scene.load.spritesheet('items', 'assets/images/items.png', { frameWidth: 32 })
-  }
 }

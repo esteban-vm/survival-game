@@ -1,14 +1,14 @@
 import '@/game.css'
 import Phaser from 'phaser'
 import PhaserMatterCollisionPlugin from 'phaser-matter-collision-plugin'
-import { Main } from '@/scenes'
+import { Main, Preloader } from '@/scenes'
 
 const config: Phaser.Types.Core.GameConfig = {
   width: 512,
   height: 512,
   type: Phaser.AUTO,
   backgroundColor: '#999',
-  scene: [Main],
+  scene: [Preloader, Main],
   autoFocus: true,
   pixelArt: true,
   scale: {
