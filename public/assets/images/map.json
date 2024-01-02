@@ -45,6 +45,11 @@
           "name": "",
           "properties": [
             {
+              "name": "depth",
+              "type": "int",
+              "value": 2
+            },
+            {
               "name": "drops",
               "type": "string",
               "value": "[272, 272]"
@@ -68,6 +73,11 @@
           "id": 11,
           "name": "",
           "properties": [
+            {
+              "name": "depth",
+              "type": "int",
+              "value": 1
+            },
             {
               "name": "drops",
               "type": "string",
@@ -93,6 +103,11 @@
           "name": "",
           "properties": [
             {
+              "name": "depth",
+              "type": "int",
+              "value": 2
+            },
+            {
               "name": "drops",
               "type": "string",
               "value": "[272, 272]"
@@ -116,6 +131,11 @@
           "id": 13,
           "name": "",
           "properties": [
+            {
+              "name": "depth",
+              "type": "int",
+              "value": 1
+            },
             {
               "name": "drops",
               "type": "string",
@@ -141,6 +161,11 @@
           "name": "",
           "properties": [
             {
+              "name": "depth",
+              "type": "int",
+              "value": 1
+            },
+            {
               "name": "drops",
               "type": "string",
               "value": "[273, 273]"
@@ -164,6 +189,11 @@
           "id": 15,
           "name": "",
           "properties": [
+            {
+              "name": "depth",
+              "type": "int",
+              "value": 1
+            },
             {
               "name": "drops",
               "type": "string",
@@ -189,6 +219,11 @@
           "name": "",
           "properties": [
             {
+              "name": "depth",
+              "type": "int",
+              "value": 1
+            },
+            {
               "name": "drops",
               "type": "string",
               "value": "[273, 273]"
@@ -212,6 +247,11 @@
           "id": 17,
           "name": "",
           "properties": [
+            {
+              "name": "depth",
+              "type": "int",
+              "value": 1
+            },
             {
               "name": "drops",
               "type": "string",
@@ -237,6 +277,11 @@
           "name": "",
           "properties": [
             {
+              "name": "depth",
+              "type": "int",
+              "value": 1
+            },
+            {
               "name": "drops",
               "type": "string",
               "value": "[228, 228]"
@@ -260,6 +305,11 @@
           "id": 19,
           "name": "",
           "properties": [
+            {
+              "name": "depth",
+              "type": "int",
+              "value": 2
+            },
             {
               "name": "drops",
               "type": "string",
@@ -285,6 +335,11 @@
           "name": "",
           "properties": [
             {
+              "name": "depth",
+              "type": "int",
+              "value": 2
+            },
+            {
               "name": "drops",
               "type": "string",
               "value": "[272, 272]"
@@ -308,6 +363,11 @@
           "id": 21,
           "name": "",
           "properties": [
+            {
+              "name": "depth",
+              "type": "int",
+              "value": 1
+            },
             {
               "name": "drops",
               "type": "string",
@@ -333,6 +393,11 @@
           "name": "",
           "properties": [
             {
+              "name": "depth",
+              "type": "int",
+              "value": 2
+            },
+            {
               "name": "drops",
               "type": "string",
               "value": "[272, 272]"
@@ -356,6 +421,11 @@
           "id": 23,
           "name": "",
           "properties": [
+            {
+              "name": "depth",
+              "type": "int",
+              "value": 1
+            },
             {
               "name": "drops",
               "type": "string",
@@ -381,6 +451,11 @@
           "name": "",
           "properties": [
             {
+              "name": "depth",
+              "type": "int",
+              "value": 2
+            },
+            {
               "name": "drops",
               "type": "string",
               "value": "[272, 272]"
@@ -405,6 +480,11 @@
           "name": "",
           "properties": [
             {
+              "name": "depth",
+              "type": "int",
+              "value": 2
+            },
+            {
               "name": "drops",
               "type": "string",
               "value": "[272, 272]"
@@ -422,12 +502,18 @@
           "x": 288,
           "y": 224
         },
+
         {
           "gid": 21,
           "height": 32,
           "id": 26,
           "name": "",
           "properties": [
+            {
+              "name": "depth",
+              "type": "int",
+              "value": 2
+            },
             {
               "name": "drops",
               "type": "string",
@@ -453,6 +539,11 @@
           "name": "",
           "properties": [
             {
+              "name": "depth",
+              "type": "int",
+              "value": 1
+            },
+            {
               "name": "drops",
               "type": "string",
               "value": "[273, 273]"
@@ -476,6 +567,11 @@
           "id": 28,
           "name": "",
           "properties": [
+            {
+              "name": "depth",
+              "type": "int",
+              "value": 1
+            },
             {
               "name": "drops",
               "type": "string",
@@ -501,6 +597,11 @@
           "name": "",
           "properties": [
             {
+              "name": "depth",
+              "type": "int",
+              "value": 1
+            },
+            {
               "name": "drops",
               "type": "string",
               "value": "[273, 273]"
@@ -524,6 +625,11 @@
           "id": 30,
           "name": "",
           "properties": [
+            {
+              "name": "depth",
+              "type": "int",
+              "value": 1
+            },
             {
               "name": "drops",
               "type": "string",
@@ -549,6 +655,11 @@
           "name": "",
           "properties": [
             {
+              "name": "depth",
+              "type": "int",
+              "value": 1
+            },
+            {
               "name": "drops",
               "type": "string",
               "value": "[228, 228]"
@@ -572,6 +683,11 @@
           "id": 32,
           "name": "",
           "properties": [
+            {
+              "name": "depth",
+              "type": "int",
+              "value": 2
+            },
             {
               "name": "drops",
               "type": "string",
@@ -597,6 +713,11 @@
           "name": "",
           "properties": [
             {
+              "name": "depth",
+              "type": "int",
+              "value": 1
+            },
+            {
               "name": "drops",
               "type": "string",
               "value": "[273, 273]"
@@ -620,6 +741,11 @@
           "id": 34,
           "name": "",
           "properties": [
+            {
+              "name": "depth",
+              "type": "int",
+              "value": 2
+            },
             {
               "name": "drops",
               "type": "string",
@@ -645,6 +771,11 @@
           "name": "",
           "properties": [
             {
+              "name": "depth",
+              "type": "int",
+              "value": 1
+            },
+            {
               "name": "drops",
               "type": "string",
               "value": "[228, 228]"
@@ -668,6 +799,11 @@
           "id": 36,
           "name": "",
           "properties": [
+            {
+              "name": "depth",
+              "type": "int",
+              "value": 1
+            },
             {
               "name": "drops",
               "type": "string",
@@ -693,6 +829,11 @@
           "name": "",
           "properties": [
             {
+              "name": "depth",
+              "type": "int",
+              "value": 2
+            },
+            {
               "name": "drops",
               "type": "string",
               "value": "[272, 272]"
@@ -716,6 +857,11 @@
           "id": 38,
           "name": "",
           "properties": [
+            {
+              "name": "depth",
+              "type": "int",
+              "value": 2
+            },
             {
               "name": "drops",
               "type": "string",
@@ -741,6 +887,11 @@
           "name": "",
           "properties": [
             {
+              "name": "depth",
+              "type": "int",
+              "value": 2
+            },
+            {
               "name": "drops",
               "type": "string",
               "value": "[272, 272]"
@@ -765,6 +916,11 @@
           "name": "",
           "properties": [
             {
+              "name": "depth",
+              "type": "int",
+              "value": 2
+            },
+            {
               "name": "drops",
               "type": "string",
               "value": "[272, 272]"
@@ -788,6 +944,11 @@
           "id": 41,
           "name": "",
           "properties": [
+            {
+              "name": "depth",
+              "type": "int",
+              "value": 1
+            },
             {
               "name": "drops",
               "type": "string",
@@ -814,6 +975,11 @@
           "name": "",
           "properties": [
             {
+              "name": "depth",
+              "type": "int",
+              "value": 1
+            },
+            {
               "name": "drops",
               "type": "string",
               "value": "[273, 273]"
@@ -837,6 +1003,11 @@
           "id": 44,
           "name": "",
           "properties": [
+            {
+              "name": "depth",
+              "type": "int",
+              "value": 1
+            },
             {
               "name": "drops",
               "type": "string",
@@ -862,6 +1033,11 @@
           "name": "",
           "properties": [
             {
+              "name": "depth",
+              "type": "int",
+              "value": 1
+            },
+            {
               "name": "drops",
               "type": "string",
               "value": "[228, 228]"
@@ -885,6 +1061,11 @@
           "id": 46,
           "name": "",
           "properties": [
+            {
+              "name": "depth",
+              "type": "int",
+              "value": 1
+            },
             {
               "name": "drops",
               "type": "string",
@@ -910,6 +1091,11 @@
           "name": "",
           "properties": [
             {
+              "name": "depth",
+              "type": "int",
+              "value": 2
+            },
+            {
               "name": "drops",
               "type": "string",
               "value": "[272, 272]"
@@ -934,6 +1120,11 @@
           "name": "",
           "properties": [
             {
+              "name": "depth",
+              "type": "int",
+              "value": 1
+            },
+            {
               "name": "drops",
               "type": "string",
               "value": "[228, 228]"
@@ -957,6 +1148,11 @@
           "id": 49,
           "name": "",
           "properties": [
+            {
+              "name": "depth",
+              "type": "int",
+              "value": 2
+            },
             {
               "name": "drops",
               "type": "string",
@@ -1006,6 +1202,11 @@
           "id": 20,
           "properties": [
             {
+              "name": "depth",
+              "type": "int",
+              "value": 2
+            },
+            {
               "name": "drops",
               "type": "string",
               "value": "[272, 272]"
@@ -1022,6 +1223,11 @@
           "id": 21,
           "properties": [
             {
+              "name": "depth",
+              "type": "int",
+              "value": 1
+            },
+            {
               "name": "drops",
               "type": "string",
               "value": "[228, 228]"
@@ -1037,6 +1243,11 @@
         {
           "id": 22,
           "properties": [
+            {
+              "name": "depth",
+              "type": "int",
+              "value": 1
+            },
             {
               "name": "drops",
               "type": "string",

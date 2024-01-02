@@ -10,6 +10,7 @@ const Preloader = class extends Phaser.Scene {
     this.load.atlas('player', 'assets/images/player.png', 'assets/images/player_atlas.json')
     this.load.spritesheet('items', 'assets/images/items.png', { frameWidth: 32 })
     this.load.animation('player_anim', 'assets/images/player_anim.json')
+    this.load.audio('player', 'assets/sounds/player.mp3')
     this.load.audio('pickup', 'assets/sounds/pickup.mp3')
     this.load.audio('bush', 'assets/sounds/bush.mp3')
     this.load.audio('rock', 'assets/sounds/rock.mp3')

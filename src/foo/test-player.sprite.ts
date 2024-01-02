@@ -1,9 +1,8 @@
-import Entity from '@/entity'
 import Drop from '@/drop'
-import Resource from '@/resource'
 import Pickaxe from '@/pickaxe'
+import Resource from '@/resource'
 
-export default class Player extends Entity {
+export default class Player extends Phaser.Physics.Matter.Sprite {
   #keys
   #mousePointer
   // #touchPointer
@@ -12,10 +11,13 @@ export default class Player extends Entity {
   #touchingResources
 
   constructor(scene: Phaser.Scene, x: number, y: number) {
-    super(scene, x, y, 'player', 'player_idle_1', { health: 2, name: 'player' })
-    const collider = this.physics.bodies.circle(this.x, this.y, 12)
-    const sensor = this.physics.bodies.circle(this.x, this.y, 24, { isSensor: true })
-    const compoundBody = this.physics.body.create({ parts: [collider, sensor], frictionAir: 0.35 })
+    super(scene.matter.world, x, y, 'player', 'player_idle_1')
+    this.scene.add.existing(this)
+    this.name = 'player'
+    const physics = new Phaser.Physics.Matter.MatterPhysics(this.scene)
+    const collider = physics.bodies.circle(this.x, this.y, 12)
+    const sensor = physics.bodies.circle(this.x, this.y, 24, { isSensor: true })
+    const compoundBody = physics.body.create({ parts: [collider, sensor], frictionAir: 0.35 })
     this.setExistingBody(compoundBody)
     this.setFixedRotation()
     this.#keys = this.scene.input.keyboard!.createCursorKeys()
@@ -24,12 +26,12 @@ export default class Player extends Entity {
     this.#pickaxe = new Pickaxe(this.scene, this.x, this.y)
     this.#pickaxeRotation = 0
     this.#touchingResources = <Resource[]>[]
-    this.#createPickupCollisions(collider)
     this.#createMiningCollisions(sensor)
+    this.#createPickupCollisions(collider)
   }
 
   update() {
-    const vector = new Phaser.Math.Vector2()
+    const velocity = new Phaser.Math.Vector2()
     const { left, right, up, down } = this.#keys
     // const { position, wasTouch } = this.#touchPointer
 
@@ -39,24 +41,24 @@ export default class Player extends Entity {
     const touchingDown = down.isDown /* || (wasTouch && position.y > this.y) */
 
     if (touchingLeft) {
-      vector.x = -1
+      velocity.x = -1
       this.setFlipX(true)
     } else if (touchingRight) {
-      vector.x = 1
+      velocity.x = 1
       this.setFlipX(false)
     }
 
     if (touchingUp) {
-      vector.y = -1
+      velocity.y = -1
     } else if (touchingDown) {
-      vector.y = 1
+      velocity.y = 1
     }
 
-    vector.normalize()
-    vector.scale(2.5)
-    this.setVelocity(vector.x, vector.y)
+    velocity.normalize()
+    velocity.scale(2.5)
+    this.setVelocity(velocity.x, velocity.y)
 
-    if (Math.abs(this.velocity.x) > 0.1 || Math.abs(this.velocity.y) > 0.1) {
+    if (Math.abs(this.#velocity.x) > 0.1 || Math.abs(this.#velocity.y) > 0.1) {
       this.anims.play('player_walk', true)
     } else {
       this.anims.play('player_idle', true)
@@ -64,6 +66,10 @@ export default class Player extends Entity {
 
     this.#pickaxe.setPosition(this.x, this.y)
     this.#rotatePickaxe()
+  }
+
+  get #velocity() {
+    return this.body!.velocity
   }
 
   #rotatePickaxe() {
@@ -85,15 +91,6 @@ export default class Player extends Entity {
     }
   }
 
-  #createPickupCollisions(playerCollider: MatterJS.BodyType) {
-    this.scene.matterCollision.addOnCollideStart({
-      objectA: playerCollider,
-      callback: ({ gameObjectB }) => {
-        if (gameObjectB instanceof Drop) gameObjectB.pickup()
-      },
-    })
-  }
-
   #createMiningCollisions(playerSensor: MatterJS.BodyType) {
     this.scene.matterCollision.addOnCollideStart({
       objectA: playerSensor,
@@ -111,6 +108,22 @@ export default class Player extends Entity {
         this.#touchingResources = this.#touchingResources.filter((object) => object !== gameObjectB)
       },
     })
+  }
+
+  #createPickupCollisions(playerCollider: MatterJS.BodyType) {
+    this.scene.matterCollision.addOnCollideStart({
+      objectA: playerCollider,
+      callback: ({ gameObjectB }) => {
+        if (gameObjectB instanceof Drop) gameObjectB.pickup()
+      },
+    })
+
+    // this.scene.matterCollision.addOnCollideActive({
+    //   objectA: playerCollider,
+    //   callback: ({ gameObjectB }) => {
+    //     if (gameObjectB instanceof Drop) gameObjectB.pickup()
+    //   },
+    // })
   }
 
   #whackStuff() {

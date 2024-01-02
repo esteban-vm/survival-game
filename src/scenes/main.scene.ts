@@ -40,13 +40,14 @@ const Main = class extends Phaser.Scene {
       const customProperties = <CustomProperties[]>properties
       const offset = <number>customProperties.find(({ name }) => name === 'offset')!.value
       const drops = <[number, number]>JSON.parse(<string>customProperties.find(({ name }) => name === 'drops')!.value)
-      this.#resources.push(new Resource(this, x!, y!, type, offset, drops))
+      const depth = <number>customProperties.find(({ name }) => name === 'depth')!.value
+      this.#resources.push(new Resource(this, x!, y!, type, { offset, drops, depth }))
     })
   }
 }
 
 interface CustomProperties {
-  name: string
+  name: 'offset' | 'drops' | 'depth'
   type: string
   value: string | number
 }
