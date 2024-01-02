@@ -10,7 +10,7 @@ export default class Drop extends Phaser.Physics.Matter.Sprite {
     this.setExistingBody(collider)
     this.setFrictionAir(1)
     this.setScale(0.5)
-    this.#sound = this.scene.sound.add('pickup')
+    this.#sound = this.scene.sound.add('drop')
     this.#sound.volume = 0.5
   }
 

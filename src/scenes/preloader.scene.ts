@@ -1,26 +1,30 @@
+import { Scenes, Assets, Textures, Animations, Sounds } from '@/constants'
+
 const Preloader = class extends Phaser.Scene {
   constructor() {
-    super('preloader-scene')
+    super(Scenes.Preloader)
   }
 
   preload() {
-    this.load.image('tiles', 'assets/images/rpg_nature_tileset.png')
-    this.load.tilemapTiledJSON('map', 'assets/images/map.json')
-    this.load.atlas('resources', 'assets/images/resources.png', 'assets/images/resources_atlas.json')
-    this.load.atlas('player', 'assets/images/player.png', 'assets/images/player_atlas.json')
-    this.load.atlas('enemies', 'assets/images/enemies.png', 'assets/images/enemies_atlas.json')
-    this.load.spritesheet('items', 'assets/images/items.png', { frameWidth: 32 })
-    this.load.animation('player_anim', 'assets/images/player_anim.json')
-    this.load.animation('enemies_anim', 'assets/images/enemies_anim.json')
-    this.load.audio('player', 'assets/sounds/player.mp3')
-    this.load.audio('pickup', 'assets/sounds/pickup.mp3')
-    this.load.audio('bush', 'assets/sounds/bush.mp3')
-    this.load.audio('rock', 'assets/sounds/rock.mp3')
-    this.load.audio('tree', 'assets/sounds/tree.mp3')
+    this.load.image(Assets.Tileset, `assets/images/${Assets.TilesetName}.png`)
+    this.load.tilemapTiledJSON(Assets.Map, `assets/images/${Assets.Map}.json`)
+    this.load.spritesheet(Assets.Items, `assets/images/${Assets.Items}.png`, { frameWidth: 32 })
+
+    Object.values(Textures).forEach((texture) => {
+      this.load.atlas(texture, `assets/images/${texture}.png`, `assets/images/${texture}_atlas.json`)
+    })
+
+    Object.values(Animations).forEach((animation) => {
+      this.load.animation(animation, `assets/images/${animation}.json`)
+    })
+
+    Object.values(Sounds).forEach((sound) => {
+      this.load.audio(sound, `assets/sounds/${sound}.mp3`)
+    })
   }
 
   create() {
-    this.scene.start('main-scene')
+    this.scene.start(Scenes.Main)
   }
 }
 
