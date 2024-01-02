@@ -1,3 +1,4 @@
+import { Assets, Layers, Scenes } from '@/constants'
 import { Player, Resource } from '@/sprites'
 
 const Main = class extends Phaser.Scene {
@@ -7,7 +8,7 @@ const Main = class extends Phaser.Scene {
   #runningOnDesktop!: boolean
 
   constructor() {
-    super('main-scene')
+    super(Scenes.Main)
   }
 
   init() {
@@ -16,12 +17,12 @@ const Main = class extends Phaser.Scene {
   }
 
   create() {
-    this.#map = this.make.tilemap({ key: 'map' })
-    const tileset = this.#map.addTilesetImage('rpg_nature_tileset', 'tiles')!
-    const layer1 = this.#map.createLayer('Layer 1', tileset)!
+    this.#map = this.make.tilemap({ key: Assets.Map })
+    const tileset = this.#map.addTilesetImage(Assets.TilesetName, Assets.Tileset)!
+    const layer1 = this.#map.createLayer(Layers.Layer1, tileset)!
     layer1.setCollisionByProperty({ collides: true })
     this.matter.world.convertTilemapLayer(layer1)
-    this.#map.createLayer('Layer 2', tileset)
+    this.#map.createLayer(Layers.Layer2, tileset)
     if (this.#runningOnDesktop) {
       this.#player = new Player(this, 200, 200)
       this.#addResources()
@@ -41,13 +42,14 @@ const Main = class extends Phaser.Scene {
       const offset = <number>customProperties.find(({ name }) => name === 'offset')!.value
       const drops = <[number, number]>JSON.parse(<string>customProperties.find(({ name }) => name === 'drops')!.value)
       const depth = <number>customProperties.find(({ name }) => name === 'depth')!.value
-      this.#resources.push(new Resource(this, x!, y!, type, { offset, drops, depth }))
+      const health = <number>customProperties.find(({ name }) => name === 'health')!.value
+      this.#resources.push(new Resource(this, x!, y!, type, { offset, health, drops, depth }))
     })
   }
 }
 
 interface CustomProperties {
-  name: 'offset' | 'drops' | 'depth'
+  name: 'offset' | 'drops' | 'depth' | 'health'
   type: string
   value: string | number
 }
