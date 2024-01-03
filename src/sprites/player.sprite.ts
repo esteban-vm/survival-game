@@ -1,12 +1,12 @@
 import { Texture, Sound } from '@/constants'
-import Entity from '@/entity'
+import BaseEntity from '@/base-entity'
 import Pickaxe from '@/pickaxe'
 import Resource from '@/resource'
 import Drop from '@/drop'
 
-export default class Player extends Entity {
+export default class Player extends BaseEntity {
   #keys
-  #mousePointer
+  #pointer
   // #touchPointer
   #pickaxe
   #pickaxeRotation
@@ -20,7 +20,7 @@ export default class Player extends Entity {
     this.setExistingBody(compoundBody)
     this.setFixedRotation()
     this.#keys = this.scene.input.keyboard!.createCursorKeys()
-    this.#mousePointer = this.scene.input.mousePointer
+    this.#pointer = this.scene.input.mousePointer
     // this.#touchPointer = this.scene.input.pointer1
     this.#pickaxe = new Pickaxe(this.scene, this.x, this.y)
     this.#pickaxeRotation = 0
@@ -64,7 +64,7 @@ export default class Player extends Entity {
   }
 
   #rotatePickaxe() {
-    if (this.#mousePointer.isDown) this.#pickaxeRotation += 6
+    if (this.#pointer.isDown) this.#pickaxeRotation += 6
     else this.#pickaxeRotation = 0
 
     if (this.#pickaxeRotation > 100) {
@@ -80,7 +80,7 @@ export default class Player extends Entity {
     this.scene.matterCollision.addOnCollideStart({
       objectA: playerCollider,
       callback: ({ gameObjectB }) => {
-        if (gameObjectB instanceof Drop) gameObjectB.pickup()
+        if (gameObjectB instanceof Drop) gameObjectB.hit()
       },
     })
   }

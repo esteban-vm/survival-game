@@ -41,7 +41,7 @@ const Main = class extends Phaser.Scene {
       const health = <number>customProperties.find(({ name }) => name === 'health')!.value
       const drops = <[number, number]>JSON.parse(<string>customProperties.find(({ name }) => name === 'drops')!.value)
       const offset = <number>customProperties.find(({ name }) => name === 'offset')!.value
-      this.#resources.push(new Resource(this, x!, y!, type, depth, health, drops, offset))
+      this.#resources.push(new Resource(offset, drops, this, x!, y!, type, health, depth))
     })
   }
 }
