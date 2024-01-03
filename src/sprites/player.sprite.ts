@@ -1,7 +1,8 @@
+import { Texture, Sound } from '@/constants'
 import Entity from '@/entity'
-import Drop from '@/drop'
-import Resource from '@/resource'
 import Pickaxe from '@/pickaxe'
+import Resource from '@/resource'
+import Drop from '@/drop'
 
 export default class Player extends Entity {
   #keys
@@ -12,7 +13,7 @@ export default class Player extends Entity {
   #touchingResources
 
   constructor(scene: Phaser.Scene, x: number, y: number) {
-    super(scene, x, y, 'player', 'player_idle_1', { health: 2, name: 'player' })
+    super(scene, x, y, Texture.Player, 'player_idle_1', 2, undefined, Sound.Player)
     const collider = this.physics.bodies.circle(this.x, this.y, 12)
     const sensor = this.physics.bodies.circle(this.x, this.y, 24, { isSensor: true })
     const compoundBody = this.physics.body.create({ parts: [collider, sensor], frictionAir: 0.35 })
@@ -46,43 +47,33 @@ export default class Player extends Entity {
       this.setFlipX(false)
     }
 
-    if (touchingUp) {
-      vector.y = -1
-    } else if (touchingDown) {
-      vector.y = 1
-    }
+    if (touchingUp) vector.y = -1
+    else if (touchingDown) vector.y = 1
 
     vector.normalize()
     vector.scale(2.5)
-    this.setVelocity(vector.x, vector.y)
 
-    if (Math.abs(this.velocity.x) > 0.1 || Math.abs(this.velocity.y) > 0.1) {
-      this.anims.play('player_walk', true)
-    } else {
-      this.anims.play('player_idle', true)
-    }
+    this.setVelocity(vector.x, vector.y)
+    const { x, y } = this.velocity
+
+    if (Math.abs(x) > 0.1 || Math.abs(y) > 0.1) this.anims.play('player_walk', true)
+    else this.anims.play('player_idle', true)
 
     this.#pickaxe.setPosition(this.x, this.y)
     this.#rotatePickaxe()
   }
 
   #rotatePickaxe() {
-    if (this.#mousePointer.isDown) {
-      this.#pickaxeRotation += 6
-    } else {
-      this.#pickaxeRotation = 0
-    }
+    if (this.#mousePointer.isDown) this.#pickaxeRotation += 6
+    else this.#pickaxeRotation = 0
 
     if (this.#pickaxeRotation > 100) {
       this.#pickaxeRotation = 0
       this.#whackStuff()
     }
 
-    if (this.flipX) {
-      this.#pickaxe.setAngle(-this.#pickaxeRotation - 90)
-    } else {
-      this.#pickaxe.setAngle(this.#pickaxeRotation)
-    }
+    if (this.flipX) this.#pickaxe.setAngle(-this.#pickaxeRotation - 90)
+    else this.#pickaxe.setAngle(this.#pickaxeRotation)
   }
 
   #createPickupCollisions(playerCollider: MatterJS.BodyType) {
@@ -98,10 +89,8 @@ export default class Player extends Entity {
     this.scene.matterCollision.addOnCollideStart({
       objectA: playerSensor,
       callback: ({ bodyB, gameObjectB }) => {
-        if ((<MatterJS.BodyType>bodyB).isSensor) return
-        if (gameObjectB instanceof Resource) {
-          this.#touchingResources.push(gameObjectB)
-        }
+        if ((<typeof playerSensor>bodyB).isSensor) return
+        if (gameObjectB instanceof Resource) this.#touchingResources.push(gameObjectB)
       },
     })
 

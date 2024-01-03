@@ -1,32 +1,37 @@
+import type { Texture, Sound } from '@/constants'
 import Drop from '@/drop'
 
 export default abstract class Entity extends Phaser.Physics.Matter.Sprite {
+  physics
   #health
-  #drops
+  #dropFrames
+  #dropItems
   #position
   #sound
-  physics
 
   constructor(
     scene: Phaser.Scene,
     x: number,
     y: number,
-    texture: string,
+    texture: Texture,
     frame: string,
-    { health, drops, depth = 1, name }: EntityOptions
+    health: number,
+    depth?: number,
+    sound?: Sound,
+    drops?: [number, number]
   ) {
     super(scene.matter.world, x, y, texture, frame)
     this.scene.add.existing(this)
-    this.depth = depth
-    this.name = name
     this.x += this.width / 2
     this.y -= this.height / 2
-    this.#health = health
-    this.#drops = drops
-    this.#position = new Phaser.Math.Vector2(this.x, this.y)
-    this.#sound = this.scene.sound.add(this.name)
-    this.#sound.volume = 0.5
+    this.depth = depth ?? 1
     this.physics = new Phaser.Physics.Matter.MatterPhysics(this.scene)
+    this.#health = health
+    this.#dropFrames = drops
+    this.#dropItems = <Drop[]>[]
+    this.#position = new Phaser.Math.Vector2(this.x, this.y)
+    this.#sound = this.scene.sound.add(sound ?? frame)
+    this.#sound.volume = 0.5
   }
 
   get position() {
@@ -43,18 +48,13 @@ export default abstract class Entity extends Phaser.Physics.Matter.Sprite {
   }
 
   hit() {
-    this.#sound?.play()
+    this.#sound.play()
     this.#health--
     if (this.dead) {
-      this.#drops?.forEach((frame) => new Drop(this.scene, this.x, this.y, frame))
+      this.#dropFrames?.forEach((frame) => {
+        this.#dropItems.push(new Drop(this.scene, this.x, this.y, frame))
+      })
       this.destroy()
     }
   }
-}
-
-interface EntityOptions {
-  health: number
-  depth?: number
-  drops?: [number, number]
-  name: string
 }

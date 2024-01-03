@@ -1,30 +1,30 @@
-import { Scenes, Assets, Textures, Animations, Sounds } from '@/constants'
+import { Scene, Asset, Texture, Animation, Sound } from '@/constants'
 
 const Preloader = class extends Phaser.Scene {
   constructor() {
-    super(Scenes.Preloader)
+    super(Scene.Preloader)
   }
 
   preload() {
-    this.load.image(Assets.Tileset, `assets/images/${Assets.TilesetName}.png`)
-    this.load.tilemapTiledJSON(Assets.Map, `assets/images/${Assets.Map}.json`)
-    this.load.spritesheet(Assets.Items, `assets/images/${Assets.Items}.png`, { frameWidth: 32 })
+    this.load.image(Asset.Tileset, `assets/images/${Asset.TilesetName}.png`)
+    this.load.tilemapTiledJSON(Asset.Map, `assets/images/${Asset.Map}.json`)
+    this.load.spritesheet(Asset.Items, `assets/images/${Asset.Items}.png`, { frameWidth: 32 })
 
-    Object.values(Textures).forEach((texture) => {
+    Object.values(Texture).forEach((texture) => {
       this.load.atlas(texture, `assets/images/${texture}.png`, `assets/images/${texture}_atlas.json`)
     })
 
-    Object.values(Animations).forEach((animation) => {
+    Object.values(Animation).forEach((animation) => {
       this.load.animation(animation, `assets/images/${animation}.json`)
     })
 
-    Object.values(Sounds).forEach((sound) => {
+    Object.values(Sound).forEach((sound) => {
       this.load.audio(sound, `assets/sounds/${sound}.mp3`)
     })
   }
 
   create() {
-    this.scene.start(Scenes.Main)
+    this.scene.start(Scene.Main)
   }
 }
 
