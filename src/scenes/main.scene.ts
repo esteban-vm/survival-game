@@ -30,9 +30,7 @@ const Main = class extends Phaser.Scene {
   }
 
   update() {
-    if (this.#desktop) {
-      this.#player.update()
-    }
+    if (this.#desktop) this.#player.update()
   }
 
   #addResources() {
@@ -48,10 +46,10 @@ const Main = class extends Phaser.Scene {
   }
 }
 
+export default Main
+
 interface CustomProperties {
   name: 'offset' | 'drops' | 'depth' | 'health'
   type: string
   value: string | number
 }
-
-export default Main
