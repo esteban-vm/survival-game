@@ -6,7 +6,6 @@ import Drop from '@/drop'
 export default class Player extends BaseEntity {
   #keys
   #pointer
-  // #touchPointer
   #pickaxe
   #pickaxeRotation
   #touchingResources
@@ -20,7 +19,6 @@ export default class Player extends BaseEntity {
     this.setFixedRotation()
     this.#keys = this.scene.input.keyboard!.createCursorKeys()
     this.#pointer = this.scene.input.mousePointer
-    // this.#touchPointer = this.scene.input.pointer1
     this.#pickaxe = new Pickaxe(this.scene, this.x, this.y)
     this.#pickaxeRotation = 0
     this.#touchingResources = <Resource[]>[]
@@ -31,12 +29,11 @@ export default class Player extends BaseEntity {
   update() {
     const vector = new Phaser.Math.Vector2()
     const { left, right, up, down } = this.#keys
-    // const { position, wasTouch } = this.#touchPointer
 
-    const touchingLeft = left.isDown /* || (wasTouch && position.x < this.x) */
-    const touchingRight = right.isDown /* || (wasTouch && position.x > this.x) */
-    const touchingUp = up.isDown /* || (wasTouch && position.y < this.y) */
-    const touchingDown = down.isDown /* || (wasTouch && position.y > this.y) */
+    const touchingLeft = left.isDown
+    const touchingRight = right.isDown
+    const touchingUp = up.isDown
+    const touchingDown = down.isDown
 
     if (touchingLeft) {
       vector.x = -1

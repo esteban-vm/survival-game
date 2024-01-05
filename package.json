@@ -12,7 +12,6 @@
     "assets": "rm -rf public/icons/* && pwa-asset-generator icon.png public/icons -i index.html -t png -e -f -w -o false"
   },
   "devDependencies": {
-    "@types/hammerjs": "^2.0.41",
     "@typescript-eslint/eslint-plugin": "^6.2.1",
     "@typescript-eslint/parser": "^6.2.1",
     "eslint": "^8.46.0",
@@ -28,7 +27,6 @@
     "vite-tsconfig-paths": "^4.2.0"
   },
   "dependencies": {
-    "hammerjs": "^2.0.8",
     "normalize.css": "^8.0.1",
     "phaser": "^3.60.0",
     "phaser-matter-collision-plugin": "^1.0.0"
