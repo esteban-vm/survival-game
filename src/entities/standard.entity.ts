@@ -1,8 +1,8 @@
 import type { DropFrames } from '@/types'
-import BaseEntity from '@/base-entity'
+import BaseEntity from '@/base'
 import Drop from '@/drop'
 
-export default abstract class MainEntity extends BaseEntity {
+export default abstract class StandardEntity extends BaseEntity {
   #dropFrames
   #dropItems
 

@@ -1,4 +1,4 @@
-import BaseEntity from '@/base-entity'
+import { BaseEntity } from '@/entities'
 
 export default class Drop extends BaseEntity {
   constructor(scene: Phaser.Scene, x: number, y: number, frame: number) {

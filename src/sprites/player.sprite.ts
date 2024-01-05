@@ -1,4 +1,4 @@
-import BaseEntity from '@/base-entity'
+import { BaseEntity } from '@/entities'
 import Resource from '@/resource'
 import Pickaxe from '@/pickaxe'
 import Drop from '@/drop'

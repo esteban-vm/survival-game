@@ -1,7 +1,7 @@
 import type { EntityType, DropFrames } from '@/types'
-import MainEntity from '@/main-entity'
+import { StandardEntity } from '@/entities'
 
-export default class Resource extends MainEntity {
+export default class Resource extends StandardEntity {
   constructor(
     offset: number,
     drops: DropFrames,
