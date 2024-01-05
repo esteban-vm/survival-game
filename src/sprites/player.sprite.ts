@@ -1,5 +1,4 @@
-import { BaseEntity } from '@/entities'
-import Resource from '@/resource'
+import { BaseEntity, StandardEntity } from '@/entities'
 import Pickaxe from '@/pickaxe'
 import Drop from '@/drop'
 
@@ -8,7 +7,7 @@ export default class Player extends BaseEntity {
   #pointer
   #pickaxe
   #pickaxeRotation
-  #touchingResources
+  #touchingEntities
 
   constructor(scene: Phaser.Scene, x: number, y: number) {
     super(scene, x, y, 'player', 1, 2, 'player')
@@ -21,7 +20,7 @@ export default class Player extends BaseEntity {
     this.#pointer = this.scene.input.mousePointer
     this.#pickaxe = new Pickaxe(this.scene, this.x, this.y)
     this.#pickaxeRotation = 0
-    this.#touchingResources = <Resource[]>[]
+    this.#touchingEntities = <StandardEntity[]>[]
     this.#createPickupCollisions(collider)
     this.#createMiningCollisions(sensor)
   }
@@ -50,11 +49,7 @@ export default class Player extends BaseEntity {
     vector.scale(2.5)
 
     this.setVelocity(vector.x, vector.y)
-    const { x, y } = this.velocity
-
-    if (Math.abs(x) > 0.1 || Math.abs(y) > 0.1) this.anims.play('player_walk', true)
-    else this.anims.play('player_idle', true)
-
+    this.toggleAnimation()
     this.#pickaxe.setPosition(this.x, this.y)
     this.#rotatePickaxe()
   }
@@ -85,21 +80,21 @@ export default class Player extends BaseEntity {
     this.scene.matterCollision.addOnCollideStart({
       objectA: playerSensor,
       callback: ({ bodyB, gameObjectB }) => {
-        if ((<typeof playerSensor>bodyB).isSensor) return
-        if (gameObjectB instanceof Resource) this.#touchingResources.push(gameObjectB)
+        if ((<MatterJS.BodyType>bodyB).isSensor) return
+        if (gameObjectB instanceof StandardEntity) this.#touchingEntities.push(gameObjectB)
       },
     })
 
     this.scene.matterCollision.addOnCollideEnd({
       objectA: playerSensor,
       callback: ({ gameObjectB }) => {
-        this.#touchingResources = this.#touchingResources.filter((object) => object !== gameObjectB)
+        this.#touchingEntities = this.#touchingEntities.filter((object) => object !== gameObjectB)
       },
     })
   }
 
   #whackStuff() {
-    this.#touchingResources = this.#touchingResources.filter((resource) => !resource.dead)
-    this.#touchingResources.forEach((resource) => resource.hit())
+    this.#touchingEntities = this.#touchingEntities.filter((resource) => !resource.dead)
+    this.#touchingEntities.forEach((resource) => resource.hit())
   }
 }

@@ -45,7 +45,7 @@ const Main = class extends Phaser.Scene {
   }
 
   #addPlayer() {
-    this.#player = new Player(this, 200, 200)
+    this.#player = new Player(this, 220, 220)
   }
 
   #addEnemies() {

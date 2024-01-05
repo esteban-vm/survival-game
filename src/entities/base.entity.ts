@@ -19,6 +19,7 @@ export default abstract class BaseEntity extends Phaser.Physics.Matter.Sprite {
     super(scene.matter.world, x, y, texture, frame)
     this.scene.add.existing(this)
     this.depth = depth
+    this.name = sound
     this.physics = new Phaser.Physics.Matter.MatterPhysics(this.scene)
     this.#health = health
     this.#position = new Phaser.Math.Vector2(this.x, this.y)
@@ -42,5 +43,13 @@ export default abstract class BaseEntity extends Phaser.Physics.Matter.Sprite {
   hit() {
     this.#sound.play()
     this.#health--
+  }
+
+  toggleAnimation() {
+    if (Math.abs(this.velocity.x) > 0.1 || Math.abs(this.velocity.y) > 0.1) {
+      this.anims.play(`${this.name}_walk`, true)
+    } else {
+      this.anims.play(`${this.name}_idle`, true)
+    }
   }
 }
