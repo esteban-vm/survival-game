@@ -1,3 +1,4 @@
+import { Textures } from '@/constants'
 import { BaseEntity, StandardEntity } from '@/entities'
 import Pickaxe from '@/pickaxe'
 import Drop from '@/drop'
@@ -26,6 +27,7 @@ export default class Player extends BaseEntity {
   }
 
   update() {
+    if (this.dead) return
     const vector = new Phaser.Math.Vector2()
     const { left, right, up, down } = this.#keys
 
@@ -52,6 +54,13 @@ export default class Player extends BaseEntity {
     this.toggleAnimation()
     this.#pickaxe.setPosition(this.x, this.y)
     this.#rotatePickaxe()
+  }
+
+  onDeath() {
+    this.anims.stop()
+    this.setTexture(Textures.Items, 0)
+    this.setOrigin(0.5)
+    this.#pickaxe.destroy()
   }
 
   #rotatePickaxe() {

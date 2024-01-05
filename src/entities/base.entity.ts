@@ -40,9 +40,12 @@ export default abstract class BaseEntity extends Phaser.Physics.Matter.Sprite {
     return this.#health <= 0
   }
 
+  onDeath() {}
+
   hit() {
     this.#sound.play()
     this.#health--
+    if (this.dead) this.onDeath()
   }
 
   toggleAnimation() {
