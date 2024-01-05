@@ -33,9 +33,9 @@ export default class Enemy extends StandardEntity {
           this.#attackTimer = setInterval(this.#attack, 500, this.#player)
         }
       }
-      this.setFlipX(this.velocity.x < 0)
-      this.toggleAnimation()
     }
+    this.setFlipX(this.velocity.x < 0)
+    this.toggleAnimation()
   }
 
   #createMiningCollisions(enemySensor: MatterJS.BodyType) {
