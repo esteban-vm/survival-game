@@ -1,12 +1,15 @@
+import type { DropFrames } from '@/types'
 import BaseEntity from '@/base-entity'
 import Drop from '@/drop'
 
-export default abstract class Entity extends BaseEntity {
+export default abstract class MainEntity extends BaseEntity {
   #dropFrames
   #dropItems
 
-  constructor(drops: [number, number], ...params: RestParams) {
+  constructor(drops: DropFrames, ...params: BaseEntityParams) {
     super(...params)
+    this.x += this.width / 2
+    this.y -= this.height / 2
     this.#dropFrames = drops
     this.#dropItems = <Drop[]>[]
   }
@@ -22,4 +25,4 @@ export default abstract class Entity extends BaseEntity {
   }
 }
 
-type RestParams = ConstructorParameters<typeof BaseEntity>
+type BaseEntityParams = ConstructorParameters<typeof BaseEntity>

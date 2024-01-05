@@ -1,7 +1,6 @@
-import { Texture, Sound } from '@/constants'
 import BaseEntity from '@/base-entity'
-import Pickaxe from '@/pickaxe'
 import Resource from '@/resource'
+import Pickaxe from '@/pickaxe'
 import Drop from '@/drop'
 
 export default class Player extends BaseEntity {
@@ -13,7 +12,7 @@ export default class Player extends BaseEntity {
   #touchingResources
 
   constructor(scene: Phaser.Scene, x: number, y: number) {
-    super(scene, x, y, Texture.Player, 'player_idle_1', 2, undefined, Sound.Player)
+    super(scene, x, y, 'player', 1, 2, 'player')
     const collider = this.physics.bodies.circle(this.x, this.y, 12)
     const sensor = this.physics.bodies.circle(this.x, this.y, 24, { isSensor: true })
     const compoundBody = this.physics.body.create({ parts: [collider, sensor], frictionAir: 0.35 })

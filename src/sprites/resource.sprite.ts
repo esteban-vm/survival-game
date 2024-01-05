@@ -1,19 +1,19 @@
-import { Texture } from '@/constants'
-import Entity from '@/entity'
+import type { EntityType, DropFrames } from '@/types'
+import MainEntity from '@/main-entity'
 
-export default class Resource extends Entity {
+export default class Resource extends MainEntity {
   constructor(
     offset: number,
-    drops: [number, number],
+    drops: DropFrames,
     scene: Phaser.Scene,
     x: number,
     y: number,
-    ...params: [frame: string, health: number, depth: number]
+    depth: number,
+    health: number,
+    entity: EntityType
   ) {
-    super(drops, scene, x, y, Texture.Resources, ...params)
+    super(drops, scene, x, y, 'resources', depth, health, entity, entity)
     this.y += this.height * (offset - 0.5)
-    this.x += this.width / 2
-    this.y -= this.height / 2
     const collider = this.physics.bodies.circle(this.x, this.y, 12)
     this.setExistingBody(collider)
     this.setStatic(true)

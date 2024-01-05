@@ -1,38 +1,53 @@
-export enum Scene {
-  Preloader = 'preloader-scene',
-  Main = 'main-scene',
+export const Atlases = <const>{
+  Player: 'player',
+  Enemies: 'enemies',
+  Resources: 'resources',
 }
 
-export enum Layer {
-  Layer1 = 'Layer 1',
-  Layer2 = 'Layer 2',
+export const Textures = <const>{
+  ...Atlases,
+  Items: 'items',
 }
 
-export enum Asset {
-  Tileset = 'tileset',
-  TilesetName = 'rpg_nature_tileset',
-  Map = 'map',
-  Items = 'items',
+export const Animations = <const>{
+  Player: 'player_anim',
+  Enemies: 'enemies_anim',
 }
 
-export enum Texture {
-  Resources = 'resources',
-  Player = 'player',
-  Enemies = 'enemies',
+export const ResourceTypes = <const>{
+  Bush: 'bush',
+  Rock: 'rock',
+  Tree: 'tree',
 }
 
-export enum Animation {
-  Player = 'player_anim',
-  Enemies = 'enemies_anim',
+export const EnemyTypes = <const>{
+  Bear: 'bear',
+  Wolf: 'wolf',
+  Ent: 'ent',
 }
 
-export enum Sound {
-  Player = 'player',
-  Drop = 'drop',
-  Bush = 'bush',
-  Rock = 'rock',
-  Tree = 'tree',
-  Bear = 'bear',
-  Wolf = 'wolf',
-  Ent = 'ent',
+export const EntityTypes = <const>{
+  ...ResourceTypes,
+  ...EnemyTypes,
+  Player: 'player',
+  Drop: 'drop',
+}
+
+export const Layers = <const>{
+  Map1: 'Layer 1',
+  Map2: 'Layer 2',
+  Resources: 'Resources',
+  Enemies: 'Enemies',
+}
+
+export const Scenes = <const>{
+  Main: 'Main Scene',
+  Preloader: 'Preloader Scene',
+}
+
+export const Stuff = <const>{
+  GameMap: 'map',
+  ItemSpritesheet: 'items',
+  Tileset: 'tileset',
+  TilesetName: 'rpg_nature_tileset',
 }

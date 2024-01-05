@@ -1,30 +1,30 @@
-import { Scene, Asset, Texture, Animation, Sound } from '@/constants'
+import { Scenes, Stuff, Atlases, Animations, EntityTypes } from '@/constants'
 
 const Preloader = class extends Phaser.Scene {
   constructor() {
-    super(Scene.Preloader)
+    super(Scenes.Preloader)
   }
 
   preload() {
-    this.load.image(Asset.Tileset, `assets/images/${Asset.TilesetName}.png`)
-    this.load.tilemapTiledJSON(Asset.Map, `assets/images/${Asset.Map}.json`)
-    this.load.spritesheet(Asset.Items, `assets/images/${Asset.Items}.png`, { frameWidth: 32 })
+    this.load.image(Stuff.Tileset, `assets/images/${Stuff.TilesetName}.png`)
+    this.load.tilemapTiledJSON(Stuff.GameMap, `assets/images/${Stuff.GameMap}.json`)
+    this.load.spritesheet(Stuff.ItemSpritesheet, `assets/images/${Stuff.ItemSpritesheet}.png`, { frameWidth: 32 })
 
-    Object.values(Texture).forEach((texture) => {
+    Object.values(Atlases).forEach((texture) => {
       this.load.atlas(texture, `assets/images/${texture}.png`, `assets/images/${texture}_atlas.json`)
     })
 
-    Object.values(Animation).forEach((animation) => {
+    Object.values(Animations).forEach((animation) => {
       this.load.animation(animation, `assets/images/${animation}.json`)
     })
 
-    Object.values(Sound).forEach((sound) => {
+    Object.values(EntityTypes).forEach((sound) => {
       this.load.audio(sound, `assets/sounds/${sound}.mp3`)
     })
   }
 
   create() {
-    this.scene.start(Scene.Main)
+    this.scene.start(Scenes.Main)
   }
 }
 

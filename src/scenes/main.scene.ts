@@ -1,52 +1,91 @@
-import { Asset, Layer, Scene } from '@/constants'
-import { Player, Resource } from '@/sprites'
+import type { EnemyType, ResourceType, DropFrames } from '@/types'
+import { Scenes, Stuff, Layers } from '@/constants'
+import { Player, Enemy, Resource } from '@/sprites'
 
 const Main = class extends Phaser.Scene {
   #player!: Player
+  #enemies!: Enemy[]
   #resources!: Resource[]
-  #map!: Phaser.Tilemaps.Tilemap
   #desktop!: boolean
+  #map!: Phaser.Tilemaps.Tilemap
 
   constructor() {
-    super(Scene.Main)
+    super(Scenes.Main)
   }
 
   init() {
+    this.#enemies = []
     this.#resources = []
     this.#desktop = this.game.device.os.desktop
   }
 
   create() {
-    this.#map = this.make.tilemap({ key: Asset.Map })
-    const tileset = this.#map.addTilesetImage(Asset.TilesetName, Asset.Tileset)!
-    const layer1 = this.#map.createLayer(Layer.Layer1, tileset)!
-    layer1.setCollisionByProperty({ collides: true })
-    this.matter.world.convertTilemapLayer(layer1)
-    this.#map.createLayer(Layer.Layer2, tileset)
+    this.#addLayers()
     if (this.#desktop) {
-      this.#player = new Player(this, 200, 200)
+      this.#addPlayer()
+      this.#addEnemies()
       this.#addResources()
     }
   }
 
   update() {
-    if (this.#desktop) this.#player.update()
+    if (this.#desktop) {
+      this.#player.update()
+      this.#enemies.forEach((enemy) => enemy.update())
+    }
+  }
+
+  #addLayers() {
+    this.#map = this.make.tilemap({ key: Stuff.GameMap })
+    const tileset = this.#map.addTilesetImage(Stuff.TilesetName, Stuff.Tileset)!
+    const layer1 = this.#map.createLayer(Layers.Map1, tileset)!
+    layer1.setCollisionByProperty({ collides: true })
+    this.matter.world.convertTilemapLayer(layer1)
+    this.#map.createLayer(Layers.Map2, tileset)
+  }
+
+  #addPlayer() {
+    this.#player = new Player(this, 200, 200)
+  }
+
+  #addEnemies() {
+    const enemies = this.#map.getObjectLayer(Layers.Enemies)!
+    const enemyObjs = <EnemyObject[]>enemies.objects
+    enemyObjs.forEach(({ x, y, type, properties }) => {
+      const drops = <DropFrames>JSON.parse(<string>properties.find(({ name }) => name === 'drops')!.value)
+      const health = <number>properties.find(({ name }) => name === 'health')!.value
+      this.#enemies.push(new Enemy(drops, this, x, y, health, type))
+    })
   }
 
   #addResources() {
-    const resources = this.#map.getObjectLayer('Resources')
-    resources?.objects.forEach(({ x, y, type, properties }) => {
-      const customProperties = <CustomProperties[]>properties
-      const depth = <number>customProperties.find(({ name }) => name === 'depth')!.value
-      const health = <number>customProperties.find(({ name }) => name === 'health')!.value
-      const drops = <[number, number]>JSON.parse(<string>customProperties.find(({ name }) => name === 'drops')!.value)
-      const offset = <number>customProperties.find(({ name }) => name === 'offset')!.value
-      this.#resources.push(new Resource(offset, drops, this, x!, y!, type, health, depth))
+    const resources = this.#map.getObjectLayer(Layers.Resources)!
+    const resourceObjs = <ResourceObject[]>resources.objects
+    resourceObjs.forEach(({ x, y, type, properties }) => {
+      const offset = <number>properties.find(({ name }) => name === 'offset')!.value
+      const drops = <DropFrames>JSON.parse(<string>properties.find(({ name }) => name === 'drops')!.value)
+      const depth = <number>properties.find(({ name }) => name === 'depth')!.value
+      const health = <number>properties.find(({ name }) => name === 'health')!.value
+      this.#resources.push(new Resource(offset, drops, this, x, y, depth, health, type))
     })
   }
 }
 
 export default Main
+
+interface EnemyObject extends Phaser.Types.Tilemaps.TiledObject {
+  x: number
+  y: number
+  type: EnemyType
+  properties: CustomProperties[]
+}
+
+interface ResourceObject extends Phaser.Types.Tilemaps.TiledObject {
+  x: number
+  y: number
+  type: ResourceType
+  properties: CustomProperties[]
+}
 
 interface CustomProperties {
   name: 'offset' | 'drops' | 'depth' | 'health'

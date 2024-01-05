@@ -1,4 +1,4 @@
-import type { Asset, Texture, Sound } from '@/constants'
+import type { Texture, EntityType } from '@/types'
 
 export default abstract class BaseEntity extends Phaser.Physics.Matter.Sprite {
   physics
@@ -10,19 +10,19 @@ export default abstract class BaseEntity extends Phaser.Physics.Matter.Sprite {
     scene: Phaser.Scene,
     x: number,
     y: number,
-    texture: Asset | Texture,
-    frame: string | number,
+    texture: Texture,
+    depth: number,
     health: number,
-    depth?: number,
-    sound?: Sound
+    sound: EntityType,
+    frame?: string | number
   ) {
     super(scene.matter.world, x, y, texture, frame)
     this.scene.add.existing(this)
-    this.depth = depth ?? 1
+    this.depth = depth
     this.physics = new Phaser.Physics.Matter.MatterPhysics(this.scene)
     this.#health = health
     this.#position = new Phaser.Math.Vector2(this.x, this.y)
-    this.#sound = this.scene.sound.add(sound ?? <string>frame)
+    this.#sound = this.scene.sound.add(sound)
     this.#sound.volume = 0.5
   }
 
