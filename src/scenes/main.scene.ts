@@ -46,6 +46,12 @@ const Main = class extends Phaser.Scene {
 
   #addPlayer() {
     this.#player = new Player(this, 220, 220)
+    const camera = this.cameras.main
+    const { width, height } = this.game.config
+    camera.zoom = 2
+    camera.setLerp(0.1, 0.1)
+    camera.setBounds(0, 0, <number>width, <number>height)
+    camera.startFollow(this.#player)
   }
 
   #addEnemies() {
