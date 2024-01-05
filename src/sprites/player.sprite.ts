@@ -94,7 +94,7 @@ export default class Player extends BaseEntity {
   }
 
   #whackStuff() {
-    this.#touchingEntities = this.#touchingEntities.filter((resource) => !resource.dead)
-    this.#touchingEntities.forEach((resource) => resource.hit())
+    this.#touchingEntities = this.#touchingEntities.filter((entity) => !entity.dead)
+    this.#touchingEntities.forEach((entity) => entity.hit())
   }
 }
