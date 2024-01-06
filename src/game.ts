@@ -1,7 +1,7 @@
 import '@/game.css'
 import Phaser from 'phaser'
 import PhaserMatterCollisionPlugin from 'phaser-matter-collision-plugin'
-import { Main, Preloader } from '@/scenes'
+import { Preloader, Main } from '@/scenes'
 
 const config: Phaser.Types.Core.GameConfig = {
   width: 512,

@@ -47,7 +47,6 @@ export const Scenes = <const>{
 
 export const Stuff = <const>{
   GameMap: 'map',
-  ItemSpritesheet: 'items',
   Tileset: 'tileset',
   TilesetName: 'rpg_nature_tileset',
 }
