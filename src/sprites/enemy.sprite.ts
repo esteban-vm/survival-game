@@ -18,8 +18,10 @@ export default class Enemy extends StandardEntity {
 
   update() {
     if (this.dead) return
+
     if (this.#player) {
       const vector = this.#player.position.subtract(this.position)
+
       if (vector.length() > 24) {
         vector.normalize()
         this.setVelocityX(vector.x)
@@ -34,6 +36,7 @@ export default class Enemy extends StandardEntity {
         }
       }
     }
+
     this.setFlipX(this.velocity.x < 0)
     this.toggleAnimation()
   }
