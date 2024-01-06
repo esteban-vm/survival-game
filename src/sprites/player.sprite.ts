@@ -15,9 +15,9 @@ export default class Player extends BaseEntity {
 
   constructor(scene: Phaser.Scene, x: number, y: number) {
     super(scene, x, y, 'player', 1, 20, 'player')
-    const collider = this.physics.bodies.circle(this.x, this.y, 12)
-    const sensor = this.physics.bodies.circle(this.x, this.y, 24, { isSensor: true })
-    const compoundBody = this.physics.body.create({ parts: [collider, sensor], frictionAir: 0.35 })
+    const collider = this.createCircleBody(12)
+    const sensor = this.createCircleBody(24, true)
+    const compoundBody = this.createCompoundBody(collider, sensor)
     this.setExistingBody(compoundBody)
     this.setFixedRotation()
     const { W, S, A, D, ENTER } = Phaser.Input.Keyboard.KeyCodes

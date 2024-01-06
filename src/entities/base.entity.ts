@@ -1,7 +1,7 @@
 import type { Texture, EntityType } from '@/types'
 
 export default abstract class BaseEntity extends Phaser.Physics.Matter.Sprite {
-  physics
+  #physics
   #health
   #position
   #sound
@@ -20,7 +20,7 @@ export default abstract class BaseEntity extends Phaser.Physics.Matter.Sprite {
     this.scene.add.existing(this)
     this.depth = depth
     this.name = sound
-    this.physics = new Phaser.Physics.Matter.MatterPhysics(this.scene)
+    this.#physics = new Phaser.Physics.Matter.MatterPhysics(this.scene)
     this.#health = health
     this.#position = new Phaser.Math.Vector2(this.x, this.y)
     this.#sound = this.scene.sound.add(sound)
@@ -54,5 +54,15 @@ export default abstract class BaseEntity extends Phaser.Physics.Matter.Sprite {
     } else {
       this.anims.play(`${this.name}_idle`, true)
     }
+  }
+
+  createCircleBody(radius: number, isSensor = false) {
+    const body = this.#physics.bodies.circle(this.x, this.y, radius, { isSensor })
+    return body
+  }
+
+  createCompoundBody(collider: MatterJS.BodyType, sensor: MatterJS.BodyType) {
+    const body = this.#physics.body.create({ parts: [collider, sensor], frictionAir: 0.35 })
+    return body
   }
 }

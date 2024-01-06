@@ -8,9 +8,9 @@ export default class Enemy extends StandardEntity {
 
   constructor(drops: DropFrames, scene: Phaser.Scene, x: number, y: number, health: number, entity: EntityType) {
     super(drops, scene, x, y, 'enemies', 1, health, entity, `${entity}_idle_1`)
-    const collider = this.physics.bodies.circle(this.x, this.y, 12)
-    const sensor = this.physics.bodies.circle(this.x, this.y, 80, { isSensor: true })
-    const compoundBody = this.physics.body.create({ parts: [collider, sensor], frictionAir: 0.35 })
+    const collider = this.createCircleBody(12)
+    const sensor = this.createCircleBody(80, true)
+    const compoundBody = this.createCompoundBody(collider, sensor)
     this.setExistingBody(compoundBody)
     this.setFixedRotation()
     this.#createMiningCollisions(sensor)
