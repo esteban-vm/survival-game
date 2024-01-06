@@ -6,7 +6,6 @@ const Main = class extends Phaser.Scene {
   #player!: Player
   #enemies!: Enemy[]
   #resources!: Resource[]
-  #desktop!: boolean
   #map!: Phaser.Tilemaps.Tilemap
 
   constructor() {
@@ -16,23 +15,18 @@ const Main = class extends Phaser.Scene {
   init() {
     this.#enemies = []
     this.#resources = []
-    this.#desktop = this.game.device.os.desktop
   }
 
   create() {
     this.#addLayers()
-    if (this.#desktop) {
-      this.#addPlayer()
-      this.#addEnemies()
-      this.#addResources()
-    }
+    this.#addPlayer()
+    this.#addEnemies()
+    this.#addResources()
   }
 
   update() {
-    if (this.#desktop) {
-      this.#player.update()
-      this.#enemies.forEach((enemy) => enemy.update())
-    }
+    this.#player.update()
+    this.#enemies.forEach((enemy) => enemy.update())
   }
 
   #addLayers() {

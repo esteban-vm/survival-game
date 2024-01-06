@@ -27,6 +27,7 @@
     "vite-tsconfig-paths": "^4.2.0"
   },
   "dependencies": {
+    "nipplejs": "^0.10.1",
     "normalize.css": "^8.0.1",
     "phaser": "^3.60.0",
     "phaser-matter-collision-plugin": "^1.0.0"

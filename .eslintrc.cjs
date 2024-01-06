@@ -15,6 +15,7 @@ module.exports = {
     '@typescript-eslint/consistent-type-imports': ['warn', { disallowTypeAnnotations: false }],
     'prettier/prettier': 'warn',
     'import/no-named-as-default': 'off',
+    'import/default': 'off',
     'import/order': [
       'warn',
       { groups: ['type', 'builtin', 'external', 'internal', ['sibling', 'parent'], 'index', 'unknown'] },
