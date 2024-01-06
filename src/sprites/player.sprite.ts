@@ -1,3 +1,4 @@
+import type { CollisionHandler } from '@/types'
 import nipplejs from 'nipplejs'
 import { Textures } from '@/constants'
 import { BaseEntity, StandardEntity } from '@/entities'
@@ -10,7 +11,7 @@ export default class Player extends BaseEntity {
   #pickaxe
   #pickaxeRotation
   #touchingEntities
-  #runningOnDesktop
+  #runningOnMobile
 
   constructor(scene: Phaser.Scene, x: number, y: number) {
     super(scene, x, y, 'player', 1, 20, 'player')
@@ -25,7 +26,8 @@ export default class Player extends BaseEntity {
     this.#pickaxe = new Pickaxe(this.scene, this.x, this.y)
     this.#pickaxeRotation = 0
     this.#touchingEntities = <StandardEntity[]>[]
-    this.#runningOnDesktop = this.scene.game.device.os.desktop
+    const { android, iOS, windowsPhone } = this.scene.game.device.os
+    this.#runningOnMobile = android || iOS || windowsPhone
     this.#createPickupCollisions(collider)
     this.#createMiningCollisions(sensor)
     this.#createJoystick()
@@ -91,7 +93,7 @@ export default class Player extends BaseEntity {
   }
 
   #createJoystick() {
-    if (!this.#runningOnDesktop) {
+    if (this.#runningOnMobile) {
       const joystick = nipplejs.create({ color: 'green' })
 
       joystick.on('move', (_, data) => {
@@ -110,7 +112,7 @@ export default class Player extends BaseEntity {
     }
   }
 
-  #createPickupCollisions(playerCollider: MatterJS.BodyType) {
+  #createPickupCollisions: CollisionHandler = (playerCollider) => {
     this.scene.matterCollision.addOnCollideStart({
       objectA: playerCollider,
       callback: ({ gameObjectB }) => {
@@ -119,11 +121,11 @@ export default class Player extends BaseEntity {
     })
   }
 
-  #createMiningCollisions(playerSensor: MatterJS.BodyType) {
+  #createMiningCollisions: CollisionHandler = (playerSensor) => {
     this.scene.matterCollision.addOnCollideStart({
       objectA: playerSensor,
       callback: ({ bodyB, gameObjectB }) => {
-        if ((<MatterJS.BodyType>bodyB).isSensor) return
+        if ((<typeof playerSensor>bodyB).isSensor) return
         if (gameObjectB instanceof StandardEntity) this.#touchingEntities.push(gameObjectB)
       },
     })

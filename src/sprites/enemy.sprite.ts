@@ -1,4 +1,4 @@
-import type { EntityType, DropFrames } from '@/types'
+import type { EntityType, DropFrames, CollisionHandler } from '@/types'
 import { StandardEntity } from '@/entities'
 import Player from '@/player'
 
@@ -38,7 +38,7 @@ export default class Enemy extends StandardEntity {
     this.toggleAnimation()
   }
 
-  #createMiningCollisions(enemySensor: MatterJS.BodyType) {
+  #createMiningCollisions: CollisionHandler = (enemySensor) => {
     this.scene.matterCollision.addOnCollideStart({
       objectA: enemySensor,
       callback: ({ gameObjectB }) => {
