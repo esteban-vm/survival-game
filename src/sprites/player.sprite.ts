@@ -6,10 +6,10 @@ import Pickaxe from '@/pickaxe'
 import Drop from '@/drop'
 
 export default class Player extends BaseEntity {
-  #controls
   #speed
   #pickaxe
   #pickaxeRotation
+  #controlKeys
   #touchingEntities
   #runningOnMobile
 
@@ -20,11 +20,10 @@ export default class Player extends BaseEntity {
     const compoundBody = this.createCompoundBody(collider, sensor)
     this.setExistingBody(compoundBody)
     this.setFixedRotation()
-    const { W, S, A, D, ENTER } = Phaser.Input.Keyboard.KeyCodes
-    this.#controls = <ControlKeys>this.scene.input.keyboard!.addKeys({ up: W, down: S, left: A, right: D, hit: ENTER })
     this.#speed = 2.5
     this.#pickaxe = new Pickaxe(this.scene, this.x, this.y)
     this.#pickaxeRotation = 0
+    this.#controlKeys = <ControlKeys>this.scene.input.keyboard!.addKeys(keyCodes.join(','))
     this.#touchingEntities = <StandardEntity[]>[]
     const { android, iOS, windowsPhone } = this.scene.game.device.os
     this.#runningOnMobile = android || iOS || windowsPhone
@@ -50,18 +49,18 @@ export default class Player extends BaseEntity {
 
   #handleControlKeys() {
     const vector = new Phaser.Math.Vector2()
-    const { left, right, up, down } = this.#controls
+    const { A, D, W, S, LEFT, RIGHT, UP, DOWN } = this.#controlKeys
 
-    if (left.isDown) {
+    if (A.isDown || LEFT.isDown) {
       vector.x = -1
       this.setFlipX(true)
-    } else if (right.isDown) {
+    } else if (D.isDown || RIGHT.isDown) {
       vector.x = 1
       this.setFlipX(false)
     }
 
-    if (up.isDown) vector.y = -1
-    else if (down.isDown) vector.y = 1
+    if (W.isDown || UP.isDown) vector.y = -1
+    else if (S.isDown || DOWN.isDown) vector.y = 1
 
     vector.normalize()
     vector.scale(this.#speed)
@@ -69,7 +68,9 @@ export default class Player extends BaseEntity {
   }
 
   #rotatePickaxe() {
-    if (this.#controls.hit.isDown) {
+    const { ENTER, SPACE } = this.#controlKeys
+
+    if (ENTER.isDown || SPACE.isDown) {
       this.#pickaxeRotation += 6
     } else {
       this.#pickaxeRotation = 0
@@ -94,7 +95,7 @@ export default class Player extends BaseEntity {
 
   #createJoystick() {
     if (this.#runningOnMobile) {
-      const joystick = nipplejs.create({ color: 'green' })
+      const joystick = nipplejs.create({ color: 'green', size: 80 })
 
       joystick.on('move', (_, data) => {
         if (this.dead) return
@@ -107,7 +108,6 @@ export default class Player extends BaseEntity {
         this.setVelocity(speed * Math.cos(angle), -speed * Math.sin(angle))
       })
 
-      joystick.on('pressure', () => {})
       joystick.on('end', () => this.setVelocity(0, 0))
     }
   }
@@ -139,10 +139,6 @@ export default class Player extends BaseEntity {
   }
 }
 
-interface ControlKeys {
-  up: Phaser.Input.Keyboard.Key
-  down: Phaser.Input.Keyboard.Key
-  left: Phaser.Input.Keyboard.Key
-  right: Phaser.Input.Keyboard.Key
-  hit: Phaser.Input.Keyboard.Key
-}
+const keyCodes = <const>['W', 'S', 'A', 'D', 'ENTER', 'UP', 'DOWN', 'LEFT', 'RIGHT', 'SPACE']
+type ControlKey = (typeof keyCodes)[number]
+type ControlKeys = Record<ControlKey, Phaser.Input.Keyboard.Key>
