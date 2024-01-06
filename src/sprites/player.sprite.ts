@@ -31,21 +31,16 @@ export default class Player extends BaseEntity {
     const vector = new Phaser.Math.Vector2()
     const { left, right, up, down } = this.#keys
 
-    const touchingLeft = left.isDown
-    const touchingRight = right.isDown
-    const touchingUp = up.isDown
-    const touchingDown = down.isDown
-
-    if (touchingLeft) {
+    if (left.isDown) {
       vector.x = -1
       this.setFlipX(true)
-    } else if (touchingRight) {
+    } else if (right.isDown) {
       vector.x = 1
       this.setFlipX(false)
     }
 
-    if (touchingUp) vector.y = -1
-    else if (touchingDown) vector.y = 1
+    if (up.isDown) vector.y = -1
+    else if (down.isDown) vector.y = 1
 
     vector.normalize()
     vector.scale(2.5)
