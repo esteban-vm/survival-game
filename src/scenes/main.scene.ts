@@ -18,7 +18,7 @@ const Main = class extends Phaser.Scene {
   }
 
   create() {
-    this.#addLayers()
+    this.#addMap()
     this.#addPlayer()
     this.#addEnemies()
     this.#addResources()
@@ -29,7 +29,7 @@ const Main = class extends Phaser.Scene {
     this.#enemies.forEach((enemy) => enemy.update())
   }
 
-  #addLayers() {
+  #addMap() {
     this.#map = this.make.tilemap({ key: Stuff.GameMap })
     const tileset = this.#map.addTilesetImage(Stuff.TilesetName, Stuff.Tileset)!
     const layer1 = this.#map.createLayer(Layers.Map1, tileset)!
