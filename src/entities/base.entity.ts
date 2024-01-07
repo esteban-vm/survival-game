@@ -48,14 +48,6 @@ export default abstract class BaseEntity extends Phaser.Physics.Matter.Sprite {
     if (this.dead) this.onDeath()
   }
 
-  toggleAnimation() {
-    if (Math.abs(this.velocity.x) > 0.1 || Math.abs(this.velocity.y) > 0.1) {
-      this.anims.play(`${this.name}_walk`, true)
-    } else {
-      this.anims.play(`${this.name}_idle`, true)
-    }
-  }
-
   createCircleBody(radius: number, isSensor = false) {
     const body = this.#physics.bodies.circle(this.x, this.y, radius, { isSensor })
     return body
@@ -64,5 +56,17 @@ export default abstract class BaseEntity extends Phaser.Physics.Matter.Sprite {
   createCompoundBody(collider: MatterJS.BodyType, sensor: MatterJS.BodyType) {
     const body = this.#physics.body.create({ parts: [collider, sensor], frictionAir: 0.35 })
     return body
+  }
+
+  toggleAnimation() {
+    if (Math.abs(this.velocity.x) > 0.1 || Math.abs(this.velocity.y) > 0.1) {
+      this.playAnimation('walk')
+    } else {
+      this.playAnimation('idle')
+    }
+  }
+
+  playAnimation(anim: 'walk' | 'idle') {
+    this.anims.play(`${this.name}_${anim}`, true)
   }
 }

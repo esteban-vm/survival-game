@@ -10,8 +10,8 @@ export default class Player extends BaseEntity {
   #pickaxe
   #pickaxeRotation
   #controlKeys
-  #touchingEntities
-  #runningOnMobile
+  #collidingEntities
+  #touchAvailable
 
   constructor(scene: Phaser.Scene, x: number, y: number) {
     super(scene, x, y, 'player', 1, 20, 'player')
@@ -24,9 +24,8 @@ export default class Player extends BaseEntity {
     this.#pickaxe = new Pickaxe(this.scene, this.x, this.y)
     this.#pickaxeRotation = 0
     this.#controlKeys = <ControlKeys>this.scene.input.keyboard!.addKeys(keyCodes.join(','))
-    this.#touchingEntities = <StandardEntity[]>[]
-    const { android, iOS, windowsPhone } = this.scene.game.device.os
-    this.#runningOnMobile = android || iOS || windowsPhone
+    this.#collidingEntities = <StandardEntity[]>[]
+    this.#touchAvailable = this.scene.game.device.input.touch
     this.#createPickupCollisions(collider)
     this.#createMiningCollisions(sensor)
     this.#createJoystick()
@@ -35,8 +34,6 @@ export default class Player extends BaseEntity {
   update() {
     if (this.dead) return
     this.#handleControlKeys()
-    this.toggleAnimation()
-    this.#pickaxe.setPosition(this.x, this.y)
     this.#rotatePickaxe()
   }
 
@@ -48,26 +45,33 @@ export default class Player extends BaseEntity {
   }
 
   #handleControlKeys() {
-    const vector = new Phaser.Math.Vector2()
-    const { A, D, W, S, LEFT, RIGHT, UP, DOWN } = this.#controlKeys
+    if (!this.#touchAvailable) {
+      this.toggleAnimation()
+      const vector = new Phaser.Math.Vector2()
+      const { A, D, W, S, LEFT, RIGHT, UP, DOWN } = this.#controlKeys
 
-    if (A.isDown || LEFT.isDown) {
-      vector.x = -1
-      this.setFlipX(true)
-    } else if (D.isDown || RIGHT.isDown) {
-      vector.x = 1
-      this.setFlipX(false)
+      if (A.isDown || LEFT.isDown) {
+        vector.x = -1
+        this.setFlipX(true)
+      } else if (D.isDown || RIGHT.isDown) {
+        vector.x = 1
+        this.setFlipX(false)
+      }
+
+      if (W.isDown || UP.isDown) {
+        vector.y = -1
+      } else if (S.isDown || DOWN.isDown) {
+        vector.y = 1
+      }
+
+      vector.normalize()
+      vector.scale(this.#speed)
+      this.setVelocity(vector.x, vector.y)
     }
-
-    if (W.isDown || UP.isDown) vector.y = -1
-    else if (S.isDown || DOWN.isDown) vector.y = 1
-
-    vector.normalize()
-    vector.scale(this.#speed)
-    this.setVelocity(vector.x, vector.y)
   }
 
   #rotatePickaxe() {
+    this.#pickaxe.setPosition(this.x, this.y)
     const { ENTER, SPACE } = this.#controlKeys
 
     if (ENTER.isDown || SPACE.isDown) {
@@ -89,26 +93,36 @@ export default class Player extends BaseEntity {
   }
 
   #whackStuff() {
-    this.#touchingEntities = this.#touchingEntities.filter((entity) => !entity.dead)
-    this.#touchingEntities.forEach((entity) => entity.hit())
+    this.#collidingEntities = this.#collidingEntities.filter((entity) => !entity.dead)
+    this.#collidingEntities.forEach((entity) => entity.hit())
   }
 
   #createJoystick() {
-    if (this.#runningOnMobile) {
+    if (this.#touchAvailable) {
       const joystick = nipplejs.create({ color: 'green', size: 80 })
+      this.playAnimation('idle')
 
       joystick.on('move', (_, data) => {
         if (this.dead) return
+        this.toggleAnimation()
         const direction = data.direction?.angle
-        if (direction === 'left') this.setFlipX(true)
-        else if (direction === 'right') this.setFlipX(false)
+
+        if (direction === 'left') {
+          this.setFlipX(true)
+        } else if (direction === 'right') {
+          this.setFlipX(false)
+        }
+
         const force = Math.min(data.force, 1)
         const angle = data.angle.radian
         const speed = this.#speed * force
         this.setVelocity(speed * Math.cos(angle), -speed * Math.sin(angle))
       })
 
-      joystick.on('end', () => this.setVelocity(0, 0))
+      joystick.on('end', () => {
+        this.playAnimation('idle')
+        this.setVelocity(0, 0)
+      })
     }
   }
 
@@ -126,14 +140,14 @@ export default class Player extends BaseEntity {
       objectA: playerSensor,
       callback: ({ bodyB, gameObjectB }) => {
         if ((<typeof playerSensor>bodyB).isSensor) return
-        if (gameObjectB instanceof StandardEntity) this.#touchingEntities.push(gameObjectB)
+        if (gameObjectB instanceof StandardEntity) this.#collidingEntities.push(gameObjectB)
       },
     })
 
     this.scene.matterCollision.addOnCollideEnd({
       objectA: playerSensor,
       callback: ({ gameObjectB }) => {
-        this.#touchingEntities = this.#touchingEntities.filter((object) => object !== gameObjectB)
+        this.#collidingEntities = this.#collidingEntities.filter((object) => object !== gameObjectB)
       },
     })
   }
