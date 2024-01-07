@@ -45,29 +45,28 @@ export default class Player extends BaseEntity {
   }
 
   #handleControlKeys() {
-    if (!this.#touchAvailable) {
-      this.toggleAnimation()
-      const vector = new Phaser.Math.Vector2()
-      const { A, D, W, S, LEFT, RIGHT, UP, DOWN } = this.#controlKeys
+    if (this.#touchAvailable) return
+    this.toggleAnimation()
+    const vector = new Phaser.Math.Vector2()
+    const { A, D, W, S, LEFT, RIGHT, UP, DOWN } = this.#controlKeys
 
-      if (A.isDown || LEFT.isDown) {
-        vector.x = -1
-        this.setFlipX(true)
-      } else if (D.isDown || RIGHT.isDown) {
-        vector.x = 1
-        this.setFlipX(false)
-      }
-
-      if (W.isDown || UP.isDown) {
-        vector.y = -1
-      } else if (S.isDown || DOWN.isDown) {
-        vector.y = 1
-      }
-
-      vector.normalize()
-      vector.scale(this.#speed)
-      this.setVelocity(vector.x, vector.y)
+    if (A.isDown || LEFT.isDown) {
+      vector.x = -1
+      this.setFlipX(true)
+    } else if (D.isDown || RIGHT.isDown) {
+      vector.x = 1
+      this.setFlipX(false)
     }
+
+    if (W.isDown || UP.isDown) {
+      vector.y = -1
+    } else if (S.isDown || DOWN.isDown) {
+      vector.y = 1
+    }
+
+    vector.normalize()
+    vector.scale(this.#speed)
+    this.setVelocity(vector.x, vector.y)
   }
 
   #rotatePickaxe() {
@@ -98,32 +97,31 @@ export default class Player extends BaseEntity {
   }
 
   #createJoystick() {
-    if (this.#touchAvailable) {
-      const joystick = nipplejs.create({ color: 'green', size: 80 })
+    if (!this.#touchAvailable) return
+    const joystick = nipplejs.create({ color: 'green', size: 80 })
+    this.playAnimation('idle')
+
+    joystick.on('move', (_, data) => {
+      if (this.dead) return
+      this.toggleAnimation()
+      const direction = data.direction?.angle
+
+      if (direction === 'left') {
+        this.setFlipX(true)
+      } else if (direction === 'right') {
+        this.setFlipX(false)
+      }
+
+      const force = Math.min(data.force, 1)
+      const angle = data.angle.radian
+      const speed = this.#speed * force
+      this.setVelocity(speed * Math.cos(angle), -speed * Math.sin(angle))
+    })
+
+    joystick.on('end', () => {
       this.playAnimation('idle')
-
-      joystick.on('move', (_, data) => {
-        if (this.dead) return
-        this.toggleAnimation()
-        const direction = data.direction?.angle
-
-        if (direction === 'left') {
-          this.setFlipX(true)
-        } else if (direction === 'right') {
-          this.setFlipX(false)
-        }
-
-        const force = Math.min(data.force, 1)
-        const angle = data.angle.radian
-        const speed = this.#speed * force
-        this.setVelocity(speed * Math.cos(angle), -speed * Math.sin(angle))
-      })
-
-      joystick.on('end', () => {
-        this.playAnimation('idle')
-        this.setVelocity(0, 0)
-      })
-    }
+      this.setVelocity(0, 0)
+    })
   }
 
   #createPickupCollisions: CollisionHandler = (playerCollider) => {
