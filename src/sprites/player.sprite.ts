@@ -47,8 +47,8 @@ export default class Player extends BaseEntity {
   #handleControlKeys() {
     if (this.#touchAvailable) return
     this.toggleAnimation()
+    const { A, D, W, S, ENTER, LEFT, RIGHT, UP, DOWN, SPACE } = this.#controlKeys
     const vector = new Phaser.Math.Vector2()
-    const { A, D, W, S, LEFT, RIGHT, UP, DOWN } = this.#controlKeys
 
     if (A.isDown || LEFT.isDown) {
       vector.x = -1
@@ -64,6 +64,12 @@ export default class Player extends BaseEntity {
       vector.y = 1
     }
 
+    if (ENTER.isDown || SPACE.isDown) {
+      this.#pickaxeRotation += 6
+    } else {
+      this.#pickaxeRotation = 0
+    }
+
     vector.normalize()
     vector.scale(this.#speed)
     this.setVelocity(vector.x, vector.y)
@@ -71,13 +77,6 @@ export default class Player extends BaseEntity {
 
   #rotatePickaxe() {
     this.#pickaxe.setPosition(this.x, this.y)
-    const { ENTER, SPACE } = this.#controlKeys
-
-    if (ENTER.isDown || SPACE.isDown) {
-      this.#pickaxeRotation += 6
-    } else {
-      this.#pickaxeRotation = 0
-    }
 
     if (this.#pickaxeRotation > 100) {
       this.#pickaxeRotation = 0
@@ -98,8 +97,8 @@ export default class Player extends BaseEntity {
 
   #createJoystick() {
     if (!this.#touchAvailable) return
-    const joystick = nipplejs.create({ color: 'green', size: 80 })
     this.playAnimation('idle')
+    const joystick = nipplejs.create({ color: 'green', size: 80 })
 
     joystick.on('move', (_, data) => {
       if (this.dead) return
