@@ -144,7 +144,7 @@ export default class Player extends BaseEntity {
     this.scene.matterCollision.addOnCollideEnd({
       objectA: playerSensor,
       callback: ({ gameObjectB }) => {
-        this.#collidingEntities = this.#collidingEntities.filter((object) => object !== gameObjectB)
+        this.#collidingEntities = this.#collidingEntities.filter((entity) => entity !== gameObjectB)
       },
     })
   }
