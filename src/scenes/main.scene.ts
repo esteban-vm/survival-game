@@ -73,16 +73,12 @@ const Main = class extends Phaser.Scene {
 
 export default Main
 
-interface EnemyObject extends Phaser.Types.Tilemaps.TiledObject {
-  x: number
-  y: number
+interface EnemyObject extends Required<Phaser.Types.Tilemaps.TiledObject> {
   type: EnemyType
   properties: CustomProperties[]
 }
 
-interface ResourceObject extends Phaser.Types.Tilemaps.TiledObject {
-  x: number
-  y: number
+interface ResourceObject extends Required<Phaser.Types.Tilemaps.TiledObject> {
   type: ResourceType
   properties: CustomProperties[]
 }
