@@ -22,4 +22,5 @@ _(touch screens are not completely supported yet)_
 This project is released under the MIT [LICENSE](/LICENSE 'License')
 
 ![Survival Game screenshot 2](/screenshot2.jpeg 'Survival Game screenshot 2')
-![Survival Game screenshot](/screenshot1.jpeg 'Survival Game screenshot')
+![Survival Game screenshot 1](/screenshot1.jpeg 'Survival Game screenshot 1')
+![Survival Game screenshot 3](/screenshot3.jpeg 'Survival Game screenshot 3')
