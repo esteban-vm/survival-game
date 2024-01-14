@@ -73,18 +73,18 @@ const Main = class extends Phaser.Scene {
 
 export default Main
 
-interface EnemyObject extends Required<Phaser.Types.Tilemaps.TiledObject> {
+interface EnemyObject extends CustomTiledObject {
   type: EnemyType
-  properties: CustomProperties[]
 }
 
-interface ResourceObject extends Required<Phaser.Types.Tilemaps.TiledObject> {
+interface ResourceObject extends CustomTiledObject {
   type: ResourceType
-  properties: CustomProperties[]
 }
 
-interface CustomProperties {
-  name: 'offset' | 'drops' | 'depth' | 'health'
-  type: string
-  value: string | number
+interface CustomTiledObject extends Required<Phaser.Types.Tilemaps.TiledObject> {
+  properties: {
+    name: 'offset' | 'drops' | 'depth' | 'health'
+    type: string
+    value: string | number
+  }[]
 }
